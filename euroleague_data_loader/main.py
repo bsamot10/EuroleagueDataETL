@@ -11,7 +11,7 @@ def main():
     # create a simple logfile
     if not os.path.exists("simple_logs"):
         os.makedirs("simple_logs")
-    sys.stdout = SimpleLogger(open(f"simple_logs/simple_log_{datetime_now}", "w"), sys.stdout)
+    sys.stdout = SimpleLogger(open(f"simple_logs/logfile_{datetime_now}", "w"), sys.stdout)
  
     # parse command line arguments
     config_parser = ConfigParser(year_today)
