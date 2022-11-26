@@ -30,7 +30,7 @@ class ConfigParser(ArgumentParser):
         # initialze the parent class (ArgumentParser)
         super().__init__(prog='euroleague_scrapper', description='extract and load euroleague data (format of data: json files)')
         
-        # set class variables
+        # set instance variables
         self.valid_euroleague_apis = ["Boxscore", "ShootingGraphic", "Points", "Comparison", "Evolution", "PlaybyPlay"]
         self.year_today = year_today
         self.season_codes = None
