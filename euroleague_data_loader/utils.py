@@ -96,3 +96,4 @@ class ConfigParser(ArgumentParser):
         elif self.game_code_start <= 0:
             print("\nWrong input: 'game_code_start' should be a positive integer\n")
             exit()      
+            
