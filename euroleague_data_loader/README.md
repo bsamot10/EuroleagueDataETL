@@ -52,4 +52,4 @@ Loads all the available _json_ files from the APIs of the latest Euroleague seas
 
 _python main.py_
 
-![default_execution_screenshot]([default_exeution.png](https://github.com/bsamot10/EuroleagueProject/blob/main/euroleague_data_loader/default_execution.png))
+![default_execution_screenshot](https://github.com/bsamot10/EuroleagueProject/blob/main/euroleague_data_loader/default_execution.png)
