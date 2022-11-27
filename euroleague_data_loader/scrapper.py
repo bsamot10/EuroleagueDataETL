@@ -88,7 +88,7 @@ class EuroScrapas:
 
                 # GET USEFUL INFO FROM HEADER API
                 if api == "Header":
-                    Phase, Round, Date, meta_data_dict = self.get_info_from_header_api(response_dict, meta_data_dict, gc, sc, process_start_time)
+                    Phase, Round, Date, meta_data_dict = self.get_info_from_header_api(response_dict, meta_data_dict, url, gc, sc, process_start_time)
 
                 # SET THE FILENAME OF THE JSON FILE
                 json_filename = "_".join([sc, Phase, Round, "{:02d}".format(gc), Date, api])
@@ -112,7 +112,7 @@ class EuroScrapas:
                     
         return meta_data_dict
     
-    def get_info_from_header_api(self, response_dict, meta_data_dict, gc, sc, process_start_time):
+    def get_info_from_header_api(self, response_dict, meta_data_dict, url, gc, sc, process_start_time):
     
         # GET USEFUL INFO FROM HEADER API
         Round = "{:02d}".format(int(response_dict["Round"]))
