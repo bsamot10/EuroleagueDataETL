@@ -6,8 +6,8 @@ import os
 def main():
     
     # get datetime info
-    datetime_now, year_today = get_datetime_info()     
-    
+    datetime_now, year_today = get_datetime_info()
+
     # create a simple logfile
     if not os.path.exists("simple_logs"):
         os.makedirs("simple_logs")

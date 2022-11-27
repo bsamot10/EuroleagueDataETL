@@ -98,7 +98,7 @@ class EuroScrapas:
                     json.dump(response_dict, output_file)
 
             except Exception as e:
-                print(e)
+                print(e, "--- URL:", url)
                 # UPDATE THE FAILURE COUNTER OF META_DATA DICTIONARY
                 meta_data_dict[sc]["number_of_failed_extractions"] += 1
                 # UDPATE THE FAILURE FILE BY SAVING THE FAILED URL AND THE STATUS CODE OF THE RESPONSE)

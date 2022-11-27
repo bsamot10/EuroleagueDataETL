@@ -1,2 +1,2 @@
 # EuroleagueProject
-A collection of tools for Euroleague data analysis
+A collection of Python tools for Euroleague data analysis.

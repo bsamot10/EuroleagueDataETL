@@ -5,9 +5,9 @@ from itertools import chain
 def get_datetime_info():
 
     datetime_now = datetime.now().strftime("%Y%m%d_%H%M%S")
-    month_today =  date.today().month
+    month_today = date.today().month
     year_today = date.today().year
-    if month_today not in (10, 11, 12):
+    if month_today not in (9, 10, 11, 12):
         year_today -= 1
         
     return datetime_now, year_today
@@ -41,10 +41,26 @@ class ConfigParser(ArgumentParser):
     def set_arguments(self):
         
         # set the command line arguments
-        self.add_argument('-sc', '--season_code', type=str, nargs='+')
-        self.add_argument('-api', '--euroleague_api', type=str, nargs='+', default=self.valid_euroleague_apis)
-        self.add_argument('-fel', '--failed_extractions_limit', type=int, nargs='?', default=500)
-        self.add_argument('-gcs', '--game_code_start', type=int, nargs='?', default=1)
+        self.add_argument('-sc', '--season_code', type=str, nargs='+', default=[str(self.year_today)],
+                          help="A list with the season codes without the starting 'E'. "
+                               "If the current month is not Sep, Oct, Nov, Dec, then today's year is decreased by 1. "
+                               "If '-' separates two codes, then the complete range (inclusively) between the two seasons will be requested. "
+                               "The possible seasons to request are restricted to be from the 2000-2001 Euroleague season until the current season."
+                          )
+        self.add_argument('-api', '--euroleague_api', type=str, nargs='+', default=self.valid_euroleague_apis,
+                          help="A list with the Euroleague APIs. 'Header' API is always added."
+                               "The remaining APIs are included by default, but they can also be selected manually. "
+                               "Input arguments that are not valid, will result in the request of the 'Header' API only."
+                          )
+        self.add_argument('-fel', '--failed_extractions_limit', type=int, nargs='?', default=500,
+                          help="Requesting from an API might fail. "
+                               "The present argument limits the number of failed requests per season."
+                               "If the limit in a season is exceeded, then the program moves onwards to the next season."
+                          )
+        self.add_argument('-gcs', '--game_code_start', type=int, nargs='?', default=1,
+                          help="It indicates from which game code of the 1st input season the program will start. "
+                               "The present argument is useful when the process is interrupted (intentionally or not)."
+                          )
         args = self.parse_args()
         
         return args
