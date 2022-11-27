@@ -52,3 +52,4 @@ Loads all the available _json_ files from the APIs of the latest Euroleague seas
 
 _python main.py_
 
+![Screenshot](default_exeution.png)
