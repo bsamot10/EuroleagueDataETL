@@ -18,7 +18,7 @@ class EuroScrapas:
         This is the main instance method of the class. 
         It makes use of the remaining instance methods and provides a step by step implementation of the process.
         '''  
-        # START PROCESS PER SEASON
+        # IMPLEMENT PROCESS PER SEASON
         for index, sc in enumerate(self.season_codes):
 
             # INITIALIZE BASIC VARIABLES OF PROCESS
@@ -135,7 +135,7 @@ class EuroScrapas:
         elif Phase.startswith("Fin"):
             meta_data_dict[sc]["number_of_FinalFour_games"] += 1
         else:
-            meta_data_dict[sc]["unknown_Phase"].append((Phase, url))
+            meta_data_dict[sc]["unknown_Phase"].append([Phase, url])
 
         # PRINT A MESSAGE FOR MONITORING PURPOSES
         if gc == 1:
