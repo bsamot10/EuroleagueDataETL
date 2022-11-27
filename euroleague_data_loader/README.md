@@ -48,8 +48,6 @@ The process should then be re-started manually from the season of interruption (
 
 ### Default execution
 
-Loads all the available _json_ files from the APIs of the latest Euroleague season:
-
-_python main.py_
+Loads all the available _json_ files from the APIs of the latest Euroleague season: _python main.py_
 
 ![default_execution_screenshot](https://github.com/bsamot10/EuroleagueProject/blob/main/images/euroleague_data_loader_default_execution.png)
