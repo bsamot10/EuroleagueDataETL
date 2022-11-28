@@ -42,7 +42,7 @@ class EuroScrapas:
         
     def initialize_process(self, index, sc):
         
-        # initialize timing & flag 
+        # initialize timer and flag 
         process_start_time = time()
         season_end = False
 
