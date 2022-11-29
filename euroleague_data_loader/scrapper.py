@@ -64,9 +64,9 @@ class EuroScrapas:
                                "time_counter": None}}
 
         # create directories
-        if not os.path.exists(fr"euroleague_data/{sc}"):
-            os.makedirs(fr"euroleague_data/{sc}/success")
-            os.makedirs(fr"euroleague_data/{sc}/failure")
+        if not os.path.exists(fr"../euroleague_data/{sc}"):
+            os.makedirs(fr"../euroleague_data/{sc}/success")
+            os.makedirs(fr"../euroleague_data/{sc}/failure")
 
         # initialize the game_code counter
         gc = self.game_code_start - 1
@@ -94,7 +94,7 @@ class EuroScrapas:
                 json_filename = "_".join([sc, Phase, Round, "{:02d}".format(gc), Date, api])
 
                 # load data
-                with open(fr"euroleague_data/{sc}/success/{json_filename}.json", "w") as output_file:
+                with open(fr"../euroleague_data/{sc}/success/{json_filename}.json", "w") as output_file:
                     json.dump(response_dict, output_file)
 
             except Exception as e:
@@ -102,7 +102,7 @@ class EuroScrapas:
                 # udpate the failure counter of the meta_data dictionary
                 meta_data_dict[sc]["number_of_failed_extractions"] += 1
                 # update the failure file by saving the failed URL and the status_code of the responce
-                with open(fr"euroleague_data/{sc}/failure/{sc}_failed_extractions_{self.datetime_now}.txt", 'a') as failure_file:
+                with open(fr"../euroleague_data/{sc}/failure/{sc}_failed_extractions_{self.datetime_now}.txt", 'a') as failure_file:
                     failure_file.write(f"failed_url: {url}  ---  status_code: {str(response_status)}\n")
                     failure_file.close()
                     

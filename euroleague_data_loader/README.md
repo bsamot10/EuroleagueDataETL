@@ -24,7 +24,7 @@ More details may be found in the _utils.py_ file (class _ConfigParser_, instance
   
 ### Results
 
-The results are saved in the current working directory under a folder with name _euroleague_data_ and they are classified per season.
+The results are saved in the EuroleagueProject directory under a folder with name _euroleague_data_ and they are classified per season.
 
 For each season's directory there exist two sub-directories: one for successful requests (dir name: _success_) and one for failed requests (dir name: _failure_).
 
@@ -50,4 +50,4 @@ The process should then be re-started manually from the season of interruption (
 
 Loads all the available _json_ files from the APIs of the latest Euroleague season: _python main.py_
 
-![default_execution_screenshot](https://github.com/bsamot10/EuroleagueProject/blob/main/images/euroleague_data_loader_default_execution.png)
+![default_execution_screenshot](https://github.com/bsamot10/EuroleagueProject/blob/main/docs/images/euroleague_data_loader_default_execution.png)
