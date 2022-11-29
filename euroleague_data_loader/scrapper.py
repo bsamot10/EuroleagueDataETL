@@ -33,7 +33,7 @@ class EuroScrapas:
                 meta_data_dict = self.request_extract_load_update(gc, sc, process_start_time, meta_data_dict)
 
                 # save meta_data
-                with open(fr"euroleague_data/{sc}/{sc}_meta_data_{self.datetime_now}.json", "w") as output_file:
+                with open(fr"../euroleague_data/{sc}/{sc}_meta_data_{self.datetime_now}.json", "w") as output_file:
                     json.dump(meta_data_dict, output_file)
 
                 # update flag --- the 1st condition is obvious --- the 2nd condition reflects a possible problem with the URLs or a premature end of the season (e.g. covid season E2019)
