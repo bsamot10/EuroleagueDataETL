@@ -144,4 +144,4 @@ class EuroScrapas:
               " ---  TimeCounter:", round((time() - process_start_time) / 60, 1), "min")
             
         return Phase, Round, Date, meta_data_dict
-      
+
