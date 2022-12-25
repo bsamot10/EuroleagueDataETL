@@ -68,15 +68,23 @@ class ConfigParser(ArgumentParser):
     def parse_arguments(self, args):
         
         # parse 'season_code' argument
-        season_code_args_without_dash_to_int = [int(sc) for sc in args.season_code if "-" not in sc]
-        season_code_args_with_dash = [sc for sc in args.season_code if "-" in sc]
-        season_code_args_with_dash_splitted_to_int = [list(map(int, sc.split("-"))) for sc in season_code_args_with_dash]
-        season_code_args_with_dash_splitted_to_int_ranged = [list(range(sc[0], sc[1] + 1, 1)) for sc in season_code_args_with_dash_splitted_to_int]
-        season_codes_all = [season_code_args_without_dash_to_int] + season_code_args_with_dash_splitted_to_int_ranged
-        season_codes_all_flattened_sorted = sorted(set(list(chain.from_iterable(season_codes_all))))
-        self.season_codes = [f"E{str(sc)}" for sc in season_codes_all_flattened_sorted if sc in range(2000, self.year_today + 1)]
-        print("season_codes:", self.season_codes)
-
+        try:
+            season_code_args_without_dash_to_int = [int(sc) for sc in args.season_code if "-" not in sc]
+            season_code_args_with_dash = [sc for sc in args.season_code if "-" in sc]
+            season_code_args_with_dash_splitted_to_int = [list(map(int, sc.split("-"))) for sc in season_code_args_with_dash]
+            season_code_args_with_dash_splitted_to_int_ranged = [list(range(sc[0], sc[1] + 1, 1)) for sc in season_code_args_with_dash_splitted_to_int]
+            season_codes_all = [season_code_args_without_dash_to_int] + season_code_args_with_dash_splitted_to_int_ranged
+            season_codes_all_flattened_sorted = sorted(set(list(chain.from_iterable(season_codes_all))))
+            self.season_codes = [f"E{str(sc)}" for sc in season_codes_all_flattened_sorted if sc in range(2000, self.year_today + 1)]
+            if not self.season_codes:
+                print("\nWrong input: 'season_code' is restricted to exist in the range 2000 -", self.year_today, "\n")
+                exit()
+            else:
+                print("season_codes:", self.season_codes)
+        except Exception as e:
+            print(e)
+            exit()
+            
         # parse 'euroleague_api' argument
         self.euroleague_apis = ["Header"] + [api for api in args.euroleague_api if api in self.valid_euroleague_apis]
         print("euroleague_apis:", self.euroleague_apis)
