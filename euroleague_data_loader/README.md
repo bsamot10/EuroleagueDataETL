@@ -53,6 +53,6 @@ Fetching all the available _json_ files from the APIs of the latest Euroleague s
 
 ### Example 2
 
-Fetching all the available _json_ files from the _Header_, _PlaybyPlay_ and _BoxScore_ APIs of the Euroleague seasons _2007-08_ until _2022-23_: _python main.py -api PlaybyPlay Boxscore -sc 2007-2022_
+Fetching all the available _json_ files from the _Header_, _PlaybyPlay_ and _Boxscore_ APIs of the Euroleague seasons _2007-08_ until _2022-23_: _python main.py -api PlaybyPlay Boxscore -sc 2007-2022_
 
 ![default_execution_screenshot](https://github.com/bsamot10/EuroleagueProject/blob/main/docs/images/euroleague_data_loader_example_2.png)
