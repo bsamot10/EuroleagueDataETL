@@ -14,11 +14,9 @@ The present program has been implemented with the following basic dependencies:
 
 ### Connection to PostgreSQL, creation of database and table loading
 
-After installing PostgreSQL, a connection to the PostgreSQL server is necessary. A useful tool for that is _psql_.
+After installing PostgreSQL, a connection to the PostgreSQL server is necessary, and a PostgreSQL database should be created manually.
 
-Then, a PostgreSQL database should be created manually.
-
-Finally, the tables are created and loaded with the use of the present program. The connection to the database is now handled by the _psycopg2_ python module.
+The tables are created and loaded with the use of the present program. In that case, the connection to the database is handled by the _psycopg2_ python module.
 
 The relevant configuration file is _config_connection.json_ and it has the following arguments:
 
@@ -42,6 +40,7 @@ A simple logfile that captures all the _print_ results is available in the _simp
 
 If the program is interrupted it can be re-started from the season of interruption. 
 In such case, the _season_code_ argument should start from the season of interruption.
+The tables can be also upated similarly.
 
 It should be noted, that the rows which are already loaded in the interrupted season, will not be re-loaded. 
 In fact, every table has a unique identifier, which is useful for the avoidance of duplicate inputs.
