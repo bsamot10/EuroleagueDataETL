@@ -61,8 +61,8 @@ class ConfigParser(ArgumentParser):
         # set the command line arguments
         self.add_argument('-sc', '--season_code', type=str, nargs='+', default=[str(self.year_today)],
                           help="A list with the season codes without the starting 'E'. "
-                               "If '-' separates two codes, then the complete range (inclusively) between the two seasons will be requested. "
-                               "The possible seasons to request are restricted to be from the 2000-2001 Euroleague season until the current season."
+                               "If '-' separates two codes, then the complete range (inclusively) between the two seasons will be laoded. "
+                               "The possible seasons to load are restricted to be from the 2000-2001 Euroleague season until the current season."
                           )
         self.add_argument('-tb', '--postgres_table', type=str, nargs='+', default=self.valid_postgres_tables,
                           help="A list with the postgreSQL tables."
