@@ -45,9 +45,14 @@ Information for that is available in the _game_code_counter_ parameter of the me
 
 The process should then be re-started manually from the season of interruption (_season_code_ argument should be updated accordingly), by adding the appropriate value in the command line argument of _game_code_start_ (should be equal to _game_code_counter_).
 
+### Example 1 (default execution)
 
-### Default execution
+Fetching all the available _json_ files from the APIs of the latest Euroleague season: _python main.py_
 
-Loads all the available _json_ files from the APIs of the latest Euroleague season: _python main.py_
+![default_execution_screenshot](https://github.com/bsamot10/EuroleagueProject/blob/main/docs/images/euroleague_data_loader_example_1.png)
 
-![default_execution_screenshot](https://github.com/bsamot10/EuroleagueProject/blob/main/docs/images/euroleague_data_loader_default_execution.png)
+### Example 2
+
+Fetching all the available _json_ files from the _Header_, _PlaybyPlay_ and _BoxScore_ APIs of the Euroleague seasons _2007-08_ until _2022-23_: _python main.py -api PlaybyPlay Boxscore -sc 2007-2022_
+
+![default_execution_screenshot](https://github.com/bsamot10/EuroleagueProject/blob/main/docs/images/euroleague_data_loader_example_2.png)
