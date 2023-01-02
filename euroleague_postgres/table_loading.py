@@ -220,7 +220,7 @@ class EuroDatabaseLoader(SchemaLoader):
             number_of_rows = df_play_by_play.shape[0]
 
             play_ids = df_play_by_play["NUMBEROFPLAY"]
-            game_play_ids = [f"{game_id}_{play_id}" for play_id in play_ids]
+            game_play_ids = [f"{game_id}_{'{:02d}'.format(int(play_id))}" for play_id in play_ids]
             df_play_by_play.insert(0, "game_id", [game_id for i in range(number_of_rows)])
             df_play_by_play.insert(0, "game_play_id", game_play_ids)
  
@@ -275,7 +275,7 @@ class EuroDatabaseLoader(SchemaLoader):
             number_of_rows = df_points.shape[0]
 
             point_ids = df_points["NUM_ANOT"]
-            game_point_ids = [f"{game_id}_{point_id}" for point_id in point_ids]
+            game_point_ids = [f"{game_id}_{'{:02d}'.format(int(point_id))}" for point_id in point_ids]
             df_points.insert(0, "game_id", [game_id for i in range(number_of_rows)])
             df_points.insert(0, "game_point_id", game_point_ids)
             df_points["timestamp"] = pd.to_datetime(df_points["UTC"]).fillna(datetime(1970,1,1))
