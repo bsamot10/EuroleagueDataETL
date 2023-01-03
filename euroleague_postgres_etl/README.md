@@ -1,7 +1,7 @@
 ### Description
 
-A Python program that loads the fetched _json_ files of the Euroleague APIs to a postgreSQL database.
-It is compatible with the paths and filenames that the _euroleague_data_loader_ creates.
+A Python program that loads the fetched _json_ files of the Euroleague APIs to a PostgreSQL database.
+It is compatible with the paths and filenames that the _euroleague_apai_etl_ creates.
 
 ### Requirements
 The present program has been implemented with the following basic dependencies:
@@ -22,7 +22,7 @@ More details may be found in the _utils.py_ file (class _ConfigParser_, instance
 
 ### Logs
 
-A simple logfile that captures all the _print_ results is available in the _simple_logs_ folder of the current working directory.
+A simple logfile that captures all the _print_ results is available in the _simple_logs_ folder that is created in the current working directory.
 
 ### Program interruption
 
