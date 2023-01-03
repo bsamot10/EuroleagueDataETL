@@ -32,7 +32,7 @@ The relevant configuration file is _config_connection.json_ and it has the follo
 * --season_code, -sc
 * --table, -tb
 
-More details may be found in the _utils.py_ file (class _ConfigParser_, instance function _set_arguments_).
+More details may be found in the _utils.py_ file (class _ConfigParser_, instance method _set_arguments_).
   
 ### Logs
 
