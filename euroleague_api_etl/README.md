@@ -20,7 +20,7 @@ URLs for each available API from the 1st game (_gamecode=1_) of the 2022-2023 Eu
 * --failed_extractions_limit, -fel
 * --game_code_start, -gcs
 
-More details may be found in the _utils.py_ file (class _ConfigParser_, instance function _set_arguments_).
+More details may be found in the _utils.py_ file (class _ConfigParser_, instance method _set_arguments_).
   
 ### Results
 
