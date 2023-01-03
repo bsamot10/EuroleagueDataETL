@@ -24,7 +24,7 @@ More details may be found in the _utils.py_ file (class _ConfigParser_, instance
   
 ### Results
 
-The results are saved in the EuroleagueProject directory under a folder with name _euroleague_data_ and they are classified per season.
+The results are saved in the EuroleagueProject directory under a folder with name _euroleague_json_data_ and they are classified per season.
 
 For each season's directory there exist two sub-directories: one for successful requests (dir name: _success_) and one for failed requests (dir name: _failure_).
 
@@ -49,10 +49,10 @@ The process should then be re-started manually from the season of interruption (
 
 Fetching all the available _json_ files from the APIs of the latest Euroleague season: _python main.py_
 
-![default_execution_screenshot](https://github.com/bsamot10/EuroleagueProject/blob/main/docs/images/euroleague_data_loader_example_1.png)
+![default_execution_screenshot](https://github.com/bsamot10/EuroleagueProject/blob/main/docs/images/euroleague_api_etl_example_1.png)
 
 ### Example 2
 
 Fetching all the available _json_ files from the _Header_, _PlaybyPlay_ and _BoxScore_ APIs of the Euroleague seasons _2007-08_ until _2022-23_: _python main.py -api PlaybyPlay Boxscore -sc 2007-2022_
 
-![default_execution_screenshot](https://github.com/bsamot10/EuroleagueProject/blob/main/docs/images/euroleague_data_loader_example_2.png)
+![default_execution_screenshot](https://github.com/bsamot10/EuroleagueProject/blob/main/docs/images/euroleague_api_etl_example_2.png)
