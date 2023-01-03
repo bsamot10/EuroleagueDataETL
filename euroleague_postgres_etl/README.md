@@ -59,7 +59,7 @@ and 'timestamp' column of the _points_ table, all columns have been set to be of
 All tables are dependent from the _json_ files of the _Header_ API. 
 The full dependencies of each table and the name of the columns that uniquely identify a record (_index_), are presented below:
 
- **header**
+* **header**
   * API dependencies: _Header_, _Boxscore_
   * Index column: _game_id_
 * **comparison**
