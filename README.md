@@ -9,4 +9,4 @@ A collection of Python tools for Euroleague data analysis.
 * euroleague_postgres_etl
   * A Python program that loads the fetched _json_ files of the Euroleague APIs to a PostgreSQL database
 * euroleague_csv_data
-`* 5 _csv_ files that correspond to the 5 PostgreSQL tables that are created by _euroleague_postgres_etl_ tool. The _csv_ files are updated regularly and are ready to use for data analysis. No description of the _csv_ files is provided.
+  * 5 _csv_ files that correspond to the 5 PostgreSQL tables that are created by _euroleague_postgres_etl_ tool. The _csv_ files are updated regularly and are ready to use for data analysis. No description of the _csv_ files is provided.
