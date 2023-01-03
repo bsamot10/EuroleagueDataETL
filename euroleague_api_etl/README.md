@@ -36,7 +36,7 @@ All the failed URLs are included in text files inside the _failure_ sub-director
 
 For each season's directory a meta data _json_ file is created that holds some useful information of the process.
 
-A simple logfile that captures all the _print_ results is also available in the _simple_logs_ folder thta is created in the current working directory.
+A simple logfile that captures all the _print_ results is also available in the _simple_logs_ folder that is created in the current working directory.
 
 ### Program interruption
 
