@@ -75,10 +75,10 @@ class EuroDatabaseLoader(SchemaLoader):
             df = pd.DataFrame()
             for key, value in self.map_table_columns_to_json_header.items():
                 df[key] = df_json[value]
-            df.insert(0, "time", [time_converted])   
-            df.insert(0, "date", [date_converted])   
+            df.insert(0, "time", [time_converted])
+            df.insert(0, "date", [date_converted])
             df.insert(0, "game", df[["code_team_a", "code_team_b"]].agg("-".join, axis=1))            
-            df.insert(0, "game_id", [game_id])   
+            df.insert(0, "game_id", [game_id])
             dfs_header.append(df)          
         df_header = pd.concat(dfs_header)
 
@@ -116,6 +116,7 @@ class EuroDatabaseLoader(SchemaLoader):
         df_merged["w_id"] = df_merged["w_id"].str.strip()
         df_merged["fouls_a"] = df_merged["fouls_a"].str.strip()
         df_merged["fouls_b"] = df_merged["fouls_b"].str.strip()
+        df_merged["phase"] = df_merged["phase"].str.strip()
         df_merged["season_code"] = df_merged["season_code"].str.strip()
 
         # replace numpy null values (if any) with empty strings
@@ -182,7 +183,8 @@ class EuroDatabaseLoader(SchemaLoader):
             df_merged["Minutes"] = df_merged["Minutes"].str.strip()
             
             # re-order columns and replace numpy null values (if any) with empty strings
-            columns_reordered = ["game_player_id", "game_id", "game"] + list(df_merged.columns[2:-1])
+            columns_reordered = ["game_player_id", "game_id", "game", "round", "phase", "season_code"] \
+                                + list(df_merged.columns[2:-4])
             df_merged = df_merged[columns_reordered].replace(numpy.nan, "")
             
             # load data on box_score table (populate per file)
@@ -240,7 +242,8 @@ class EuroDatabaseLoader(SchemaLoader):
             df_merged["NUMBEROFPLAY"] = df_merged["NUMBEROFPLAY"].apply(lambda x: '{:03d}'.format(x))
             
            # re-order columns and replace numpy null values (if any) with empty strings
-            columns_reordered = ["game_play_id", "game_id", "game"] + list(df_merged.columns[2:-1])
+            columns_reordered = ["game_play_id", "game_id", "game", "round", "phase", "season_code"] \
+                                + list(df_merged.columns[2:-4])
             df_merged = df_merged[columns_reordered].replace(numpy.nan, "")
 
             # load data on play_by_play table (populate per file)
@@ -304,7 +307,8 @@ class EuroDatabaseLoader(SchemaLoader):
             df_merged["NUM_ANOT"] = df_merged["NUM_ANOT"].apply(lambda x: '{:03d}'.format(x))
             
             # re-order columns and replace numpy null values (if any) with empty strings
-            columns_reordered = ["game_point_id", "game_id", "game"] + list(df_merged.columns[2:-1])
+            columns_reordered = ["game_point_id", "game_id", "game", "round", "phase", "season_code"] \
+                                + list(df_merged.columns[2:-4])
             df_merged = df_merged[columns_reordered].replace(numpy.nan, "")
             
             # load data on points table (populate per file)
@@ -370,9 +374,10 @@ class EuroDatabaseLoader(SchemaLoader):
         df_merged["puntosMaxLeadB"] = df_merged["puntosMaxLeadB"].str.strip()
 
         # re-order columns and replace numpy null values (if any) with empty strings
-        columns_reordered = ["game_id", "game"] + list(df_merged.columns[1:-1])
+        columns_reordered = ["game_id", "game", "round", "phase", "season_code"] \
+                            + list(df_merged.columns[1:-4])
         df_merged = df_merged[columns_reordered].replace(numpy.nan, "")
-            
+
         # load data on comparison table (populate per season)
         for i in range(number_of_rows):
 

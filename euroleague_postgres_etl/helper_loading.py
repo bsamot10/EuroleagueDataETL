@@ -48,11 +48,13 @@ def get_quarters_df(quarters, json_data):
 
 def get_game_header_df(json_success_filenames_header, season_code):
     '''
-    A helper function for every table loading (except 'header' table). It creates a dataframe with the game_id and the team codes.
+    A helper function for every table loading (except 'header' table).
+    It creates a dataframe with the game_id, team codes, round and season_code.
     '''
     game_header = []
     
     for json_filename in json_success_filenames_header:
+        round = json_filename.split("_")[2]
         game_code = json_filename.split("_")[3]
         game_id = f"{season_code.strip('E')}_{game_code}"
         json_path = fr"../euroleague_json_data/{season_code}/success/{json_filename}"
@@ -60,8 +62,9 @@ def get_game_header_df(json_success_filenames_header, season_code):
         json_data = json.load(json_file)
         json_file.close()            
         game = json_data["CodeTeamA"].strip() + "-" + json_data["CodeTeamB"].strip()
-        game_header.append((game_id, game))
+        phase = json_data["Phase"].strip()
+        game_header.append((game_id, game, round, phase, season_code))
         
-    df_game_header = pd.DataFrame(game_header, columns=["game_id", "game"])
+    df_game_header = pd.DataFrame(game_header, columns=["game_id", "game", "round", "phase", "season_code"])
     
     return df_game_header
