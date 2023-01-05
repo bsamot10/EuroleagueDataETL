@@ -48,8 +48,9 @@ def get_quarters_df(quarters, json_data):
 
 def get_game_header_df(json_success_filenames_header, season_code):
     '''
-    A helper function for every table loading (except 'header' table).
-    It creates a dataframe with the game_id, team codes, round and season_code.
+    A helper function for the loading of every table (except 'header' table).
+    It creates a dataframe with the 'game_id', 'game', 'round', 'phase' and 'season_code'.
+    It is used for joining with each table, so that every table has the above columns.
     '''
     game_header = []
     
@@ -68,3 +69,70 @@ def get_game_header_df(json_success_filenames_header, season_code):
     df_game_header = pd.DataFrame(game_header, columns=["game_id", "game", "round", "phase", "season_code"])
     
     return df_game_header
+
+'''
+A helper function for each table, stripping the columns that might contain redundant empty spaces.
+'''
+
+def strip_header(df):
+    
+    df["code_team_a"] = df["code_team_a"].str.strip()
+    df["code_team_b"] = df["code_team_b"].str.strip()
+    df["score_a"] = df["score_a"].str.strip()
+    df["score_b"] = df["score_b"].str.strip()
+    df["capacity"] = df["capacity"].str.strip()
+    df["game_time"] = df["game_time"].str.strip()
+    df["w_id"] = df["w_id"].str.strip()
+    df["fouls_a"] = df["fouls_a"].str.strip()
+    df["fouls_b"] = df["fouls_b"].str.strip()
+    df["phase"] = df["phase"].str.strip()
+    df["season_code"] = df["season_code"].str.strip()
+    
+    return df
+    
+def strip_box_score(df):
+
+    df["Player_ID"] = df["Player_ID"].str.strip()
+    df["Team"] = df["Team"].str.strip()
+    df["Dorsal"] = df["Dorsal"].str.strip()
+    df["Minutes"] = df["Minutes"].str.strip()
+    df["Player"] = df["Player"].str.strip().str.replace(",", "_")
+    
+    return df
+
+def strip_points(df):
+
+    df["TEAM"] = df["TEAM"].str.strip()
+    df["ID_PLAYER"] = df["ID_PLAYER"].str.strip()
+    df["ID_ACTION"] = df["ID_ACTION"].str.strip()
+    df["ZONE"] = df["ZONE"].str.strip()
+    df["FASTBREAK"] = df["FASTBREAK"].str.strip()
+    df["SECOND_CHANCE"] = df["SECOND_CHANCE"].str.strip()
+    df["POINTS_OFF_TURNOVER"] = df["POINTS_OFF_TURNOVER"].str.strip()
+    df["CONSOLE"] = df["CONSOLE"].str.strip()
+    df["PLAYER"] = df["PLAYER"].str.strip().str.replace(",", "_")
+    
+    return df
+    
+def strip_play_by_play(df):
+
+    df["CODETEAM"] = df["CODETEAM"].str.strip()
+    df["PLAYER_ID"] = df["PLAYER_ID"].str.strip()
+    df["PLAYTYPE"] = df["PLAYTYPE"].str.strip()
+    df["PLAYER"] = df["PLAYER"].str.strip().str.replace(",", "_")
+
+    return df
+
+def strip_comparison(df):
+
+    df["prevA"] = df["prevA"].str.strip()
+    df["strA"] = df["strA"].str.strip()
+    df["puntosMaxLeadA"] = df["puntosMaxLeadA"].str.strip()
+    df["prevB"] = df["prevB"].str.strip()
+    df["strB"] = df["strB"].str.strip()
+    df["puntosMaxLeadB"] = df["puntosMaxLeadB"].str.strip()
+
+    return df
+
+    
+    
