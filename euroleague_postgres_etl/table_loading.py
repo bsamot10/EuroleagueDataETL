@@ -178,6 +178,7 @@ class EuroDatabaseLoader(SchemaLoader):
             
             # strip columns that might contain redundant empty spaces
             df_merged["Player_ID"] = df_merged["Player_ID"].str.strip()
+            df_merged["Player"] = df_merged["Player"].str.strip().str.replace(",", "_")
             df_merged["Team"] = df_merged["Team"].str.strip()
             df_merged["Dorsal"] = df_merged["Dorsal"].str.strip()
             df_merged["Minutes"] = df_merged["Minutes"].str.strip()
@@ -236,6 +237,7 @@ class EuroDatabaseLoader(SchemaLoader):
             # strip columns that might contain redundant empty spaces
             df_merged["CODETEAM"] = df_merged["CODETEAM"].str.strip()
             df_merged["PLAYER_ID"] = df_merged["PLAYER_ID"].str.strip()
+            df_merged["PLAYER"] = df_merged["PLAYER"].str.strip().str.replace(",", "_")
             df_merged["PLAYTYPE"] = df_merged["PLAYTYPE"].str.strip()
             
             # add leading zeros
@@ -296,6 +298,7 @@ class EuroDatabaseLoader(SchemaLoader):
             # strip columns that might contain redundant empty spaces
             df_merged["TEAM"] = df_merged["TEAM"].str.strip()
             df_merged["ID_PLAYER"] = df_merged["ID_PLAYER"].str.strip()
+            df_merged["PLAYER"] = df_merged["PLAYER"].str.strip().str.replace(",", "_")
             df_merged["ID_ACTION"] = df_merged["ID_ACTION"].str.strip()
             df_merged["ZONE"] = df_merged["ZONE"].str.strip()
             df_merged["FASTBREAK"] = df_merged["FASTBREAK"].str.strip()
