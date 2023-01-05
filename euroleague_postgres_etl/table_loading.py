@@ -343,10 +343,12 @@ class EuroDatabaseLoader(SchemaLoader):
         
         # get the json files of shooting
         json_success_filenames_shoot = [filename for filename in json_success_filenames \
-                                        if "Shooting" in filename and filename != "E2018_RegularSeason_03_021_20181019_ShootingGraphic.json"]
+                                        if "Shooting" in filename and filename \
+                                        != "E2018_RegularSeason_03_021_20181019_ShootingGraphic.json"]
         # get the json files of comparison
         json_success_filenames_comp = [filename for filename in json_success_filenames \
-                                       if "Comparison" in filename and filename != "E2018_RegularSeason_03_021_20181019_Comparison.json"]
+                                       if "Comparison" in filename and filename \
+                                       != "E2018_RegularSeason_03_021_20181019_Comparison.json"]
         
         # extract data from the json files of shooting
         dfs_shoot = []
