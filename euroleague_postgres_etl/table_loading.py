@@ -60,7 +60,7 @@ class EuroDatabaseLoader(SchemaLoader):
                 
     def extract_and_load_header(self, season_code, json_success_filenames, json_success_filenames_header, sql_insert):
 
-        ######### EXTRACT (and a little transform) #########
+        ######### EXTRACT & TRANSFORM #########
         
         # get the json files of box_score
         json_success_filenames_box = [filename for filename in json_success_filenames \
@@ -102,8 +102,6 @@ class EuroDatabaseLoader(SchemaLoader):
             dfs_box_score.append(df)            
         df_box_score = pd.concat(dfs_box_score)
 
-        ######### TRANSFORM #########
-
         # combine data from header and box_score
         df_merged = pd.merge(df_header, df_box_score, how="outer", on="game_id")
         df_merged["date"] = df_merged["date"].fillna(datetime(1970,1,1).date())
@@ -136,7 +134,7 @@ class EuroDatabaseLoader(SchemaLoader):
                     
     def extract_and_load_box_score(self, season_code, json_success_filenames, json_success_filenames_header, sql_insert):
 
-        ######### EXTRACT (and a little transform) #########
+        ######### EXTRACT & TRANSFORM #########
 
         # extract data from the json files of header
         df_game_header = h.get_game_header_df(json_success_filenames_header, season_code)
@@ -174,8 +172,6 @@ class EuroDatabaseLoader(SchemaLoader):
             df_box_score.insert(0, "game_id", [game_id for i in range(number_of_rows)])
             df_box_score.insert(0, "game_player_id", game_player_ids)
 
-            ######### TRANSFORM #########
-
             # combine data from header and box_score
             df_merged = pd.merge(df_box_score, df_game_header, how="left", on="game_id")
             
@@ -204,7 +200,7 @@ class EuroDatabaseLoader(SchemaLoader):
 
     def extract_and_load_points(self, season_code, json_success_filenames, json_success_filenames_header, sql_insert):
 
-        ######### EXTRACT (and a little transform) #########
+        ######### EXTRACT & TRANSFORM #########
 
         # extract data from the json files of header
         df_game_header = h.get_game_header_df(json_success_filenames_header, season_code)
@@ -235,8 +231,6 @@ class EuroDatabaseLoader(SchemaLoader):
             df_points.insert(0, "game_id", [game_id for i in range(number_of_rows)])
             df_points.insert(0, "game_point_id", game_point_ids)
             df_points["timestamp"] = pd.to_datetime(df_points["UTC"]).fillna(datetime(1970,1,1))
-
-            ######### TRANSFORM #########
 
             # combine data from points and box_score
             df_merged = pd.merge(df_points, df_game_header, how="left", on="game_id").drop(["UTC"], axis=1)
@@ -270,7 +264,7 @@ class EuroDatabaseLoader(SchemaLoader):
                     
     def extract_and_load_play_by_play(self, season_code, json_success_filenames, json_success_filenames_header, sql_insert):
 
-        ######### EXTRACT (and a little transform) #########
+        ######### EXTRACT & TRANSFORM #########
 
         # extract data from the json files of header
         df_game_header = h.get_game_header_df(json_success_filenames_header, season_code)
@@ -303,8 +297,6 @@ class EuroDatabaseLoader(SchemaLoader):
             df_play_by_play.insert(0, "game_id", [game_id for i in range(number_of_rows)])
             df_play_by_play.insert(0, "game_play_id", game_play_ids)
 
-            ######### TRANSFORM #########
-
             # combine data from play_by_play and box_score
             df_merged = pd.merge(df_play_by_play, df_game_header, how="left", on="game_id")
     
@@ -336,7 +328,7 @@ class EuroDatabaseLoader(SchemaLoader):
                 
     def extract_and_load_comparison(self, season_code, json_success_filenames, json_success_filenames_header, sql_insert):
 
-        ######### EXTRACT (and a little transform) #########
+        ######### EXTRACT & TRANSFORM #########
 
         # extract data from the json files of header
         df_game_header = h.get_game_header_df(json_success_filenames_header, season_code)
@@ -370,8 +362,6 @@ class EuroDatabaseLoader(SchemaLoader):
             df.insert(0, "game_id", [game_id])
             dfs_comp.append(df)         
         df_comp = pd.concat(dfs_comp)
-
-        ######### TRANSFORM #########
 
         # combine data from shooting, comparison and header
         df_merged = pd.merge(df_shoot, df_comp, how="outer", on="game_id")
