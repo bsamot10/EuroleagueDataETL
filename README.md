@@ -7,7 +7,7 @@ A collection of Python tools for Euroleague data analysis.
 A simple Python program that fetches _json_ files from 7 possible Euroleague APIs.
 
 ##### euroleague_json_data
-A samle of the _json_ files that are fecthed by the _euroleague_api_etl_ tool.
+A sample of the _json_ files that are fecthed by the _euroleague_api_etl_ tool.
 
 ##### euroleague_postgres_etl
 A Python program that loads the fetched _json_ files of the Euroleague APIs to a PostgreSQL database.
