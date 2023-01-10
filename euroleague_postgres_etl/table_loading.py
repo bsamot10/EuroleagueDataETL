@@ -2,11 +2,14 @@ from table_schema import SchemaLoader
 import helper_loading as h
 from psycopg2 import sql
 import pandas as pd
+import pandas.io.sql as io_sql
 from datetime import datetime
 from time import time
 import numpy
 import json
 import os
+import warnings
+warnings.filterwarnings('ignore')
 
 class EuroDatabaseLoader(SchemaLoader):
     '''
@@ -57,6 +60,26 @@ class EuroDatabaseLoader(SchemaLoader):
                                                  != "E2018_RegularSeason_03_021_20181019_Header.json"]
                 getattr(self, f"extract_and_load_{table}")(season_code, json_success_filenames, json_success_filenames_header, sql_insert)
                 print("TimeCounterSeason", round(time() - start_season, 1), "sec  --- ", "TimeCounterTable:", round(time() - start_table, 1), "sec")
+                
+            if table == 'box_score':
+                
+                self.cursor.execute(f"CREATE TABLE IF NOT EXISTS players ()")
+                self.add_columns('players')
+                table_column_names_players = self.table_column_names['players']
+                index_players = self.create_unique_index('players')
+
+                sql_insert_players = sql.SQL("INSERT INTO {} ({}) VALUES ({}) ON CONFLICT ({}) DO NOTHING")\
+                                        .format(sql.SQL('players'),
+                                                sql.SQL(', ').join(map(sql.Identifier, table_column_names_players)), 
+                                                sql.SQL(', ').join(sql.Placeholder() * len(table_column_names_players)),
+                                                sql.SQL('season_player_id'))
+                
+                start_players = time()
+                print("\n-----------------------------------------------------------------------------------------------------")
+                print(f"\nLoading PLAYERS: all seasons at once")
+                self.extract_and_load_players(sql_insert_players)
+                print("TimeCounterTable", round(time() - start_players, 1), "sec")
+
                 
     def extract_and_load_header(self, season_code, json_success_filenames, json_success_filenames_header, sql_insert):
 
@@ -171,6 +194,7 @@ class EuroDatabaseLoader(SchemaLoader):
             game_player_ids = [f"{game_id}_{player_id}" for player_id in player_ids]
             df_box_score.insert(0, "game_id", [game_id for i in range(number_of_rows)])
             df_box_score.insert(0, "game_player_id", game_player_ids)
+            df_box_score["IsPlaying"].mask(~df_box_score["Minutes"].str.contains("DNP"), 1, inplace=True)
 
             # combine data from header and box_score
             df_merged = pd.merge(df_box_score, df_game_header, how="left", on="game_id")
@@ -197,6 +221,80 @@ class EuroDatabaseLoader(SchemaLoader):
                 except Exception as e:
 
                     print(e, "\ngame_player_id:", df_merged.iloc[i]["game_player_id"], "\n")
+
+    def extract_and_load_players(self, sql_insert):
+
+        ######### EXTRACT #########
+
+        query = f"select * from box_score"
+        df_box = io_sql.read_sql_query(query, self.connection)
+
+        ######### TRANSFORM #########
+
+        df_box["season_player_id"] = df_box[["season_code", "player_id", "team"]].agg("_".join, axis=1).str[1:]
+        df_box[["min", "sec"]] = df_box["minutes"].fillna("00:00") \
+            .str.replace("DNP", "00:00") \
+            .str.split(":", expand=True)
+        df_box["min"].replace(r'^\s*$', "00", regex=True, inplace=True)
+        df_box["sec"].fillna("00", inplace=True)
+        df_box["minutes"] = df_box["min"].astype('float') + df_box["sec"].astype('float') / 60
+        df_box["is_playing"].mask(df_box["minutes"] > 0, 1.0, inplace=True)
+        df_box = df_box[df_box["dorsal"] != "TOTAL"]
+
+        columns_to_sum = ["is_playing",
+                          "is_starter",
+                          "minutes",
+                          "points",
+                          "two_points_made",
+                          "two_points_attempted",
+                          "three_points_made",
+                          "three_points_attempted",
+                          "free_throws_made",
+                          "free_throws_attempted",
+                          "offensive_rebounds",
+                          "defensive_rebounds",
+                          "total_rebounds",
+                          "assists",
+                          "steals",
+                          "turnovers",
+                          "blocks_favour",
+                          "blocks_against",
+                          "fouls_commited",
+                          "fouls_received",
+                          "valuation"]
+
+        for col in columns_to_sum:
+            df_box[col] = df_box[col].astype('float')
+
+        df_to_insert = df_box.groupby("season_player_id") \
+            .agg(dict({col: ['first'] for col in ["season_code", "player_id", "player", "team"]},
+                      **{col: ['sum'] for col in columns_to_sum})).reset_index()
+
+        for col in columns_to_sum[2:]:
+            df_to_insert[col + "_per_game"] = df_to_insert[col] / df_to_insert["is_playing"]
+            df_to_insert[col + "_per_game"] = df_to_insert[col + "_per_game"].round(1)
+            if "attempted" in col:
+                col_percentage = "_".join(col.split("_")[:2]) + "_percentage"
+                df_to_insert[col_percentage] = df_to_insert["_".join(col.split("_")[:2]) + "_made"] / df_to_insert[col]
+                df_to_insert[col_percentage] = df_to_insert[col_percentage].round(3)
+
+        df_to_insert["minutes"] = df_to_insert["minutes"].round(1)
+        number_of_rows = len(df_to_insert)
+
+        ######### LOAD #########
+
+        # load data on players table (populate all seasons at once)
+        for i in range(number_of_rows):
+
+            try:
+
+                data_insert = [str(value) for value in df_to_insert.iloc[i]]
+                self.cursor.execute(sql_insert.as_string(self.connection), (data_insert))
+                self.connection.commit()
+
+            except Exception as e:
+
+                print(e, "\nseason_player_id:", df_to_insert.iloc[i]["season_player_id"], "\n")
 
     def extract_and_load_points(self, season_code, json_success_filenames, json_success_filenames_header, sql_insert):
 

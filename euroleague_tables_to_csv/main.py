@@ -20,7 +20,8 @@ def main():
 
     # get the table names and the columns to order by
     tables_order_by_cols = [("header", "game_id"), 
-                            ("box_score", "game_id"), 
+                            ("box_score", "game_id"),
+                            ("players", "player"),
                             ("points", "game_point_id"), 
                             ("play_by_play", "game_play_id"), 
                             ("comparison", "game_id")]

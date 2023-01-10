@@ -2,6 +2,8 @@ import pandas.io.sql as io_sql
 import psycopg2
 import json
 import time
+import warnings
+warnings.filterwarnings('ignore')
 
 class SimpleLogger:
     
