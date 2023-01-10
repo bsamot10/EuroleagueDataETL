@@ -68,12 +68,18 @@ The full dependencies of each table and the name of the columns that uniquely id
 * **box_score**
   * API dependencies: _Header_, _Boxscore_
   * Index column: _game_player_id_
+* **players**
+  * API dependencies: _Header_, _Boxscore_
+  * Index column: _season_player_id_
 * **points**
   * API dependencies: _Header, Points_
   * Index column: _game_point_id_
 * **play_by_play**
   * API dependencies: _Header_, _PlaybyPlay_
   * Index column: _game_play_id_
+
+The _players_ table is created from the _box_score_ table and it is not directly dependent from the _Header_ and _Boxscore_ APIs. It is a small table contaning the aggregated season stats of each player, and it is created once-off for all seasons.
+
 
 ### Example 1 (default execution)
 
