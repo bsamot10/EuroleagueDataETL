@@ -76,7 +76,7 @@ class EuroDatabaseLoader(SchemaLoader):
                 
                 start_players = time()
                 print("\n-----------------------------------------------------------------------------------------------------")
-                print(f"\nLoading PLAYERS: all seasons at once")
+                print(f"\nLoading PLAYERS: all available seasons at once")
                 self.extract_and_load_players(sql_insert_players)
                 print("TimeCounterTable", round(time() - start_players, 1), "sec")
 
