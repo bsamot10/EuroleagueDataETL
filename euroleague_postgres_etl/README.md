@@ -73,7 +73,7 @@ The full dependencies of each table and the name of the columns that uniquely id
   * Index column: _season_player_id_
 * **teams**
   * API dependencies: _Header_, _Boxscore_
-  * Index column: _season_player_id_
+  * Index column: _season_team_id_
 * **points**
   * API dependencies: _Header, Points_
   * Index column: _game_point_id_
