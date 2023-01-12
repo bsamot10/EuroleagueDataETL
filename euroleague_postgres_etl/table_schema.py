@@ -218,8 +218,7 @@ class SchemaLoader:
                                                    "points_b",
                                                    "comment",
                                                    "play_info"]
-        
-   
+          
     def set_points_columns(self):
     
         self.table_column_names["points"] = ["game_point_id",
@@ -354,9 +353,4 @@ class SchemaLoader:
         self.connection.commit()
         
         return index
-
-
-            
-            
-      
     
