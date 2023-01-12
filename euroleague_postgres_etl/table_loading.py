@@ -29,8 +29,7 @@ class EuroDatabaseLoader(SchemaLoader):
 
     def implement_table_loading(self):
         '''
-        This is the main instance method of the class. 
-        It makes use of the remaining instance methods and provides a step by step implementation of the process.
+        This is the main instance method of the class. It makes use of the remaining instance methods.
         '''  
         for table in self.postgres_tables:
             
@@ -102,7 +101,6 @@ class EuroDatabaseLoader(SchemaLoader):
                 print(f"\nLoading TEAMS: all available seasons at once")
                 self.extract_and_load_teams(sql_insert_teams)
                 print("TimeCounterTable", round(time() - start_teams, 1), "sec")
-
                 
     def extract_and_load_header(self, season_code, json_success_filenames, json_success_filenames_header, sql_insert):
 
