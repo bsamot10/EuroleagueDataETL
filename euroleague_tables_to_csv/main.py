@@ -22,6 +22,7 @@ def main():
     tables_order_by_cols = [("header", "game_id"), 
                             ("box_score", "game_id"),
                             ("players", "player"),
+                            ("teams", "season_code"),
                             ("points", "game_point_id"), 
                             ("play_by_play", "game_play_id"), 
                             ("comparison", "game_id")]

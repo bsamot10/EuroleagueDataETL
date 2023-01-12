@@ -92,7 +92,7 @@ class SchemaLoader:
                                                 "turnovers",
                                                 "blocks_favour",
                                                 "blocks_against",
-                                                "fouls_commited",
+                                                "fouls_committed",
                                                 "fouls_received",
                                                 "valuation"]
         
@@ -146,6 +146,54 @@ class SchemaLoader:
                                               "fouls_committed_per_game",
                                               "fouls_received_per_game",
                                               "valuation_per_game"]
+        
+    def set_teams_columns(self):
+    
+        self.table_column_names["teams"] = ["season_team_id",
+                                            "season_code",
+                                            "team_id",
+                                            "games_played",
+                                            "minutes",
+                                            "points",
+                                            "two_points_made",
+                                            "two_points_attempted",
+                                            "three_points_made",
+                                            "three_points_attempted",
+                                            "free_throws_made",
+                                            "free_throws_attempted",
+                                            "offensive_rebounds",
+                                            "defensive_rebounds",
+                                            "total_rebounds",
+                                            "assists",
+                                            "steals",
+                                            "turnovers",
+                                            "blocks_favour",
+                                            "blocks_against",
+                                            "fouls_committed",
+                                            "fouls_received",
+                                            "valuation",
+                                            "minutes_per_game",
+                                            "points_per_game",
+                                            "two_points_made_per_game",
+                                            "two_points_attempted_per_game",
+                                            "two_points_percentage",
+                                            "three_points_made_per_game",
+                                            "three_points_attempted_per_game",
+                                            "three_points_percentage",
+                                            "free_throws_made_per_game",
+                                            "free_throws_attempted_per_game",
+                                            "free_throws_percentage",
+                                            "offensive_rebounds_per_game",
+                                            "defensive_rebounds_per_game",
+                                            "total_rebounds_per_game",
+                                            "assists_per_game",
+                                            "steals_per_game",
+                                            "turnovers_per_game",
+                                            "blocks_favour_per_game",
+                                            "blocks_against_per_game",
+                                            "fouls_committed_per_game",
+                                            "fouls_received_per_game",
+                                            "valuation_per_game"]
                 
     def set_play_by_play_columns(self):
     
@@ -277,7 +325,7 @@ class SchemaLoader:
             self.cursor.execute(f"ALTER TABLE {table} add COLUMN IF NOT EXISTS timestamp timestamp")                            
             self.connection.commit()          
 
-        # add columns and set data types for the 'play_by_play', 'comparison' or 'box_score' table
+        # add columns and set data types for the 'play_by_play', 'comparison', 'box_score', 'players' and 'teams' tables
         else:
 
             for col in self.table_column_names[table]:
@@ -292,6 +340,7 @@ class SchemaLoader:
         map_table_to_index = {"header": "game_id",
                               "box_score": "game_player_id",
                               "players": "season_player_id",
+                              "teams": "season_team_id",
                               "play_by_play": "game_play_id",
                               "points": "game_point_id",
                               "comparison": "game_id"}
