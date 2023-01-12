@@ -71,6 +71,9 @@ The full dependencies of each table and the name of the columns that uniquely id
 * **players**
   * API dependencies: _Header_, _Boxscore_
   * Index column: _season_player_id_
+* **teams**
+  * API dependencies: _Header_, _Boxscore_
+  * Index column: _season_player_id_
 * **points**
   * API dependencies: _Header, Points_
   * Index column: _game_point_id_
@@ -78,7 +81,7 @@ The full dependencies of each table and the name of the columns that uniquely id
   * API dependencies: _Header_, _PlaybyPlay_
   * Index column: _game_play_id_
 
-The _players_ table is created from the _box_score_ table and it is not directly dependent from the _Header_ and _Boxscore_ APIs. It is a small table containing the aggregated season stats of each player, and it is created once-off for all seasons every time the _box_score_ table is requested.
+The _players_ and _teams_ tables are created from the _box_score_ table and they are not directly dependent from the _Header_ and _Boxscore_ APIs. They are small tables containing the aggregated season stats of each player and team, and they are created once-off for all seasons every time the _box_score_ table is requested.
 
 
 ### Example 1 (default execution)
@@ -91,7 +94,7 @@ _python main.py_
 
 ### Example 2
 
-Loading _header_, _play_by_lay_ and _box_score_ (and consequently _players_) tables from the Euroleague seasons _2007-08_ until _2022-23_: 
+Loading _header_, _play_by_lay_ and _box_score_ (and consequently _players_ and _teams_) tables from the Euroleague seasons _2007-08_ until _2022-23_: 
 
 _python main.py -tb header play_by_play box_score -sc 2007-2022_
 
