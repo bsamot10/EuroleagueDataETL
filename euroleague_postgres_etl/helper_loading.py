@@ -72,7 +72,8 @@ def get_game_header_df(json_success_filenames_header, season_code):
 
 def add_percentage_columns(df, col):
     '''
-    A helper function for the loading of 'players' and 'teams' table. It updates a dataframe by adding columns that represent percentage statistics.
+    A helper function for the loading of 'players' and 'teams' table. 
+    It updates a dataframe by adding columns that represent per game and percentage statistics.
     '''
     df[col + "_per_game"] = df[col] / df["is_playing"]
     df[col + "_per_game"] = df[col + "_per_game"].round(2)
