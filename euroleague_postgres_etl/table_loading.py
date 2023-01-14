@@ -14,93 +14,82 @@ warnings.filterwarnings('ignore')
 class EuroDatabaseLoader(SchemaLoader):
     '''
     The present class inherits the 'SchemaLoader' class of 'table_schema' module.
-    It uses the inherited methods and variables, as well as, the helper functions of 'helper_loading' module. 
-    It also introduces two instance variables and two types of methods.
-    The 1st type ('implement_table_loading') implements the loading process by making use of the 2nd type of methods.
-    The 2nd type ('extract_and_load_{table_name}') handles the extraction, transformation and loading of the data.
+    It uses the inherited methods and variables, as well as, the helper functions of 'helper_loading' module.
+    It also introduces two instance variables and three types of methods.
+    The 1st type ('implement_table_loading') implements the loading process by making use of the 2nd and 3rd type of methods.
+    The 2nd type ('get_sql_insert_query') creates the table and sets the sql query that populates the table.
+    The 3rd type ('extract_and_load_{table_name}') handles the extraction, transformation and loading of the data.
     '''
     def __init__(self, connection, postgres_tables, season_codes):
-        
+
         super().__init__(connection)
 
-        # the next two instance variables correspond to the two command line arguments
+        # the instance variables correspond to the two command line arguments
         self.postgres_tables = postgres_tables
         self.season_codes = season_codes
 
     def implement_table_loading(self):
         '''
-        This is the main instance method of the class. It makes use of the remaining instance methods.
-        '''  
+        This is the main instance method of the class.
+        It makes use of the remaining instance methods and provides a step by step implementation of the process.
+        '''
         for table in self.postgres_tables:
-            
-            print("\n-----------------------------------------------------------------------------------------------------")
-            
-            self.cursor.execute(f"CREATE TABLE IF NOT EXISTS {table} ()")
-            self.add_columns(table)
-            table_column_names = self.table_column_names[table]
-            index = self.create_unique_index(table)
-            
-            sql_insert = sql.SQL("INSERT INTO {} ({}) VALUES ({}) ON CONFLICT ({}) DO NOTHING")\
-                            .format(sql.SQL(table),
-                                    sql.SQL(', ').join(map(sql.Identifier, table_column_names)), 
-                                    sql.SQL(', ').join(sql.Placeholder() * len(table_column_names)),
-                                    sql.SQL(index))
-            
-            start_table = time()
 
+            print("\n-----------------------------------------------------------------------------------------------------")
+
+            # load table
+            sql_insert_table = self.get_sql_insert_query(table)
+            start_table = time()
             for season_code in self.season_codes:
-                
                 start_season = time()
-                
                 print(f"\nLoading {table.upper()}: SeasonCode {season_code}")
                 json_success_filenames = os.listdir(fr"../euroleague_json_data/{season_code}/success")
                 json_success_filenames_header = [filename for filename in json_success_filenames \
                                                  if "Header" in filename and filename \
                                                  != "E2018_RegularSeason_03_021_20181019_Header.json"]
-                getattr(self, f"extract_and_load_{table}")(season_code, json_success_filenames, json_success_filenames_header, sql_insert)
+                getattr(self, f"extract_and_load_{table}")(season_code, json_success_filenames, json_success_filenames_header, sql_insert_table)
                 print("TimeCounterSeason", round(time() - start_season, 1), "sec  --- ", "TimeCounterTable:", round(time() - start_table, 1), "sec")
-                
-            if table == 'box_score':
-                
-                # load players
-                
-                self.cursor.execute(f"DROP TABLE IF EXISTS players");
-                self.cursor.execute(f"CREATE TABLE players ()")
-                self.add_columns('players')
-                table_column_names_players = self.table_column_names['players']
-                index_players = self.create_unique_index('players')
 
-                sql_insert_players = sql.SQL("INSERT INTO {} ({}) VALUES ({}) ON CONFLICT ({}) DO NOTHING")\
-                                        .format(sql.SQL('players'),
-                                                sql.SQL(', ').join(map(sql.Identifier, table_column_names_players)), 
-                                                sql.SQL(', ').join(sql.Placeholder() * len(table_column_names_players)),
-                                                sql.SQL('season_player_id'))
-                
+            if table == 'box_score':
+
+                # load players
+                sql_insert_players = self.get_sql_insert_query('players')
                 start_players = time()
                 print("\n-----------------------------------------------------------------------------------------------------")
                 print(f"\nLoading PLAYERS: all available seasons at once")
                 self.extract_and_load_players(sql_insert_players)
                 print("TimeCounterTable", round(time() - start_players, 1), "sec")
-                
-                # load teams
-                
-                self.cursor.execute(f"DROP TABLE IF EXISTS teams");
-                self.cursor.execute(f"CREATE TABLE teams ()")
-                self.add_columns('teams')
-                table_column_names_teams = self.table_column_names['teams']
-                index_teams = self.create_unique_index('teams')
 
-                sql_insert_teams = sql.SQL("INSERT INTO {} ({}) VALUES ({}) ON CONFLICT ({}) DO NOTHING")\
-                                        .format(sql.SQL('teams'),
-                                                sql.SQL(', ').join(map(sql.Identifier, table_column_names_teams)), 
-                                                sql.SQL(', ').join(sql.Placeholder() * len(table_column_names_teams)),
-                                                sql.SQL('season_team_id'))
-                
+                # load teams
+                sql_insert_teams = self.get_sql_insert_query('teams')
                 start_teams = time()
                 print("\n-----------------------------------------------------------------------------------------------------")
                 print(f"\nLoading TEAMS: all available seasons at once")
                 self.extract_and_load_teams(sql_insert_teams)
                 print("TimeCounterTable", round(time() - start_teams, 1), "sec")
+
+    def get_sql_insert_query(self, table):
+
+        # 'players' and 'teams' tables should first be dropped, otherwise they cannot be updated properly
+        if table in ("players", "teams"):
+            self.cursor.execute(f"DROP TABLE IF EXISTS {table}")
+            self.cursor.execute(f"CREATE TABLE {table} ()")
+        else:
+            self.cursor.execute(f"CREATE TABLE IF NOT EXISTS {table} ()")
+
+        # use the instance methods and variables of the inherited class
+        self.add_columns(table)
+        table_column_names = self.table_column_names[table]
+        index = self.create_unique_index(table)
+
+        # get the sql query that populates the table
+        sql_insert = sql.SQL("INSERT INTO {} ({}) VALUES ({}) ON CONFLICT ({}) DO NOTHING")\
+                        .format(sql.SQL(table),
+                                sql.SQL(', ').join(map(sql.Identifier, table_column_names)),
+                                sql.SQL(', ').join(sql.Placeholder() * len(table_column_names)),
+                                sql.SQL(index))
+
+        return sql_insert
                 
     def extract_and_load_header(self, season_code, json_success_filenames, json_success_filenames_header, sql_insert):
 
@@ -254,8 +243,8 @@ class EuroDatabaseLoader(SchemaLoader):
 
         df_box["season_player_id"] = df_box[["season_code", "player_id", "team"]].agg("_".join, axis=1).str[1:]
         df_box[["min", "sec"]] = df_box["minutes"].fillna("00:00") \
-                                                  .str.replace("DNP", "00:00") \
-                                                  .str.split(":", expand=True)
+            .str.replace("DNP", "00:00") \
+            .str.split(":", expand=True)
         df_box["min"].replace(r'^\s*$', "00", regex=True, inplace=True)
         df_box["sec"].fillna("00", inplace=True)
         df_box["minutes"] = df_box["min"].astype('float') + df_box["sec"].astype('float') / 60
@@ -267,20 +256,15 @@ class EuroDatabaseLoader(SchemaLoader):
         for col in columns_to_sum:
             df_box[col] = df_box[col].astype('float')
 
-        df_to_insert = df_box.groupby("season_player_id") \
-                             .agg(dict({col: ['first'] for col in ["season_code", "player_id", "player", "team"]},
-                                     **{col: ['sum'] for col in columns_to_sum})).reset_index()
+        df_players = df_box.groupby("season_player_id") \
+            .agg(dict({col: ['first'] for col in ["season_code", "player_id", "player", "team"]},
+                      **{col: ['sum'] for col in columns_to_sum})).reset_index()
 
         for col in columns_to_sum[2:]:
-            df_to_insert[col + "_per_game"] = df_to_insert[col] / df_to_insert["is_playing"]
-            df_to_insert[col + "_per_game"] = df_to_insert[col + "_per_game"].round(1)
-            if "attempted" in col:
-                col_percentage = "_".join(col.split("_")[:2]) + "_percentage"
-                df_to_insert[col_percentage] = df_to_insert["_".join(col.split("_")[:2]) + "_made"] / df_to_insert[col]
-                df_to_insert[col_percentage] = df_to_insert[col_percentage].round(3)
+            h.add_percentage_columns(df_players, col)
 
-        df_to_insert["minutes"] = df_to_insert["minutes"].round(1)
-        number_of_rows = len(df_to_insert)
+        df_players["minutes"] = df_players["minutes"].round(1)
+        number_of_rows = len(df_players)
 
         ######### LOAD #########
 
@@ -289,14 +273,14 @@ class EuroDatabaseLoader(SchemaLoader):
 
             try:
 
-                data_insert = [str(value) for value in df_to_insert.iloc[i]]
+                data_insert = [str(value) for value in df_players.iloc[i]]
                 self.cursor.execute(sql_insert.as_string(self.connection), (data_insert))
                 self.connection.commit()
 
             except Exception as e:
 
-                print(e, "\nseason_player_id:", df_to_insert.iloc[i]["season_player_id"], "\n")
-                
+                print(e, "\nseason_player_id:", df_players.iloc[i]["season_player_id"], "\n")
+
     def extract_and_load_teams(self, sql_insert):
 
         ######### EXTRACT #########
@@ -308,8 +292,8 @@ class EuroDatabaseLoader(SchemaLoader):
 
         df_box["season_team_id"] = df_box[["season_code", "team"]].agg("_".join, axis=1).str[1:]
         df_box[["min", "sec"]] = df_box["minutes"].fillna("00:00") \
-                                                  .str.replace("DNP", "00:00") \
-                                                  .str.split(":", expand=True)
+            .str.replace("DNP", "00:00") \
+            .str.split(":", expand=True)
         df_box["min"].replace(r'^\s*$', "00", regex=True, inplace=True)
         df_box["sec"].fillna("00", inplace=True)
         df_box["minutes"] = (df_box["min"].astype('float') + df_box["sec"].astype('float') / 60) / 5
@@ -321,20 +305,15 @@ class EuroDatabaseLoader(SchemaLoader):
         for col in columns_to_sum:
             df_box[col] = df_box[col].astype('float')
 
-        df_to_insert = df_box.groupby("season_team_id") \
-                             .agg(dict({col: ['first'] for col in ["season_code", "team"]},
-                                     **{col: ['sum'] for col in columns_to_sum})).reset_index()
+        df_teams = df_box.groupby("season_team_id") \
+            .agg(dict({col: ['first'] for col in ["season_code", "team"]},
+                      **{col: ['sum'] for col in columns_to_sum})).reset_index()
 
         for col in columns_to_sum[1:]:
-            df_to_insert[col + "_per_game"] = df_to_insert[col] / df_to_insert["is_playing"]
-            df_to_insert[col + "_per_game"] = df_to_insert[col + "_per_game"].round(1)
-            if "attempted" in col:
-                col_percentage = "_".join(col.split("_")[:2]) + "_percentage"
-                df_to_insert[col_percentage] = df_to_insert["_".join(col.split("_")[:2]) + "_made"] / df_to_insert[col]
-                df_to_insert[col_percentage] = df_to_insert[col_percentage].round(3)
+            h.add_percentage_columns(df_teams, col)
 
-        df_to_insert["minutes"] = df_to_insert["minutes"].round(1)
-        number_of_rows = len(df_to_insert)
+        df_teams["minutes"] = df_teams["minutes"].round(1)
+        number_of_rows = len(df_teams)
 
         ######### LOAD #########
 
@@ -343,13 +322,13 @@ class EuroDatabaseLoader(SchemaLoader):
 
             try:
 
-                data_insert = [str(value) for value in df_to_insert.iloc[i]]
+                data_insert = [str(value) for value in df_teams.iloc[i]]
                 self.cursor.execute(sql_insert.as_string(self.connection), (data_insert))
                 self.connection.commit()
 
             except Exception as e:
 
-                print(e, "\nseason_team_id:", df_to_insert.iloc[i]["season_team_id"], "\n")
+                print(e, "\nseason_team_id:", df_teams.iloc[i]["season_team_id"], "\n")
                 exit()
 
     def extract_and_load_points(self, season_code, json_success_filenames, json_success_filenames_header, sql_insert):
