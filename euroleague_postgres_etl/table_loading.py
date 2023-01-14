@@ -77,17 +77,17 @@ class EuroDatabaseLoader(SchemaLoader):
         else:
             self.cursor.execute(f"CREATE TABLE IF NOT EXISTS {table} ()")
 
-        # use the instance methods and variables of the inherited class
+        # use the instance variables and methods of the inherited class
         self.add_columns(table)
         table_column_names = self.table_column_names[table]
-        index = self.create_unique_index(table)
+        table_index = self.create_unique_index(table)
 
         # get the sql query that populates the table
         sql_insert = sql.SQL("INSERT INTO {} ({}) VALUES ({}) ON CONFLICT ({}) DO NOTHING")\
                         .format(sql.SQL(table),
                                 sql.SQL(', ').join(map(sql.Identifier, table_column_names)),
                                 sql.SQL(', ').join(sql.Placeholder() * len(table_column_names)),
-                                sql.SQL(index))
+                                sql.SQL(table_index))
 
         return sql_insert
                 
