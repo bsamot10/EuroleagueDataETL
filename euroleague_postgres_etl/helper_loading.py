@@ -75,12 +75,10 @@ def add_percentage_columns(df, col):
     A helper function for the loading of 'players' and 'teams' table. 
     It updates a dataframe by adding columns that represent per game and percentage statistics.
     '''
-    df[col + "_per_game"] = df[col] / df["is_playing"]
-    df[col + "_per_game"] = df[col + "_per_game"].round(2)
+    df[col + "_per_game"] = (df[col] / df["is_playing"]).round(2)
     if "attempted" in col:
-        col_percentage = "_".join(col.split("_")[:2]) + "_percentage"
-        df[col_percentage] = df["_".join(col.split("_")[:2]) + "_made"] / df[col]
-        df[col_percentage] = df[col_percentage].round(3)
+        col_percentage = col.replace("_attempted", "_percentage")
+        df[col_percentage] = (df[col.replace("_attempted", "_made")] / df[col]).round(3)
 
 '''
 A helper function for each table, stripping the columns that might contain redundant empty spaces.
