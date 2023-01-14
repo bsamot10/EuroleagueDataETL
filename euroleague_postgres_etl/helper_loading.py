@@ -80,12 +80,10 @@ def add_percentage_columns(df, col):
         col_percentage = col.replace("_attempted", "_percentage")
         df[col_percentage] = (df[col.replace("_attempted", "_made")] / df[col]).round(3)
 
-'''
-A helper function for each table, stripping the columns that might contain redundant empty spaces.
-'''
-
 def strip_header(df):
-    
+    '''
+    A helper function stripping the 'header' columns that might contain redundant empty spaces.
+    '''
     df["code_team_a"] = df["code_team_a"].str.strip()
     df["code_team_b"] = df["code_team_b"].str.strip()
     df["score_a"] = df["score_a"].str.strip()
@@ -99,9 +97,11 @@ def strip_header(df):
     df["season_code"] = df["season_code"].str.strip()
     
     return df
-    
-def strip_box_score(df):
 
+def strip_box_score(df):
+    '''
+    A helper function stripping the 'box_score' table columns that might contain redundant empty spaces.
+    '''
     df["Player_ID"] = df["Player_ID"].str.strip()
     df["Team"] = df["Team"].str.strip()
     df["Dorsal"] = df["Dorsal"].str.strip()
@@ -111,7 +111,9 @@ def strip_box_score(df):
     return df
 
 def strip_points(df):
-
+    '''
+    A helper function stripping the 'points' table columns that might contain redundant empty spaces.
+    '''
     df["TEAM"] = df["TEAM"].str.strip()
     df["ID_PLAYER"] = df["ID_PLAYER"].str.strip()
     df["ID_ACTION"] = df["ID_ACTION"].str.strip()
@@ -125,7 +127,9 @@ def strip_points(df):
     return df
     
 def strip_play_by_play(df):
-
+    '''
+    A helper function stripping the 'play_by_play' table columns that might contain redundant empty spaces.
+    '''
     df["CODETEAM"] = df["CODETEAM"].str.strip()
     df["PLAYER_ID"] = df["PLAYER_ID"].str.strip()
     df["PLAYTYPE"] = df["PLAYTYPE"].str.strip()
@@ -134,7 +138,9 @@ def strip_play_by_play(df):
     return df
 
 def strip_comparison(df):
-
+    '''
+    A helper function stripping the 'comparison' table columns that might contain redundant empty spaces.
+    '''
     df["prevA"] = df["prevA"].str.strip()
     df["strA"] = df["strA"].str.strip()
     df["puntosMaxLeadA"] = df["puntosMaxLeadA"].str.strip()
@@ -143,6 +149,3 @@ def strip_comparison(df):
     df["puntosMaxLeadB"] = df["puntosMaxLeadB"].str.strip()
 
     return df
-
-    
-    
