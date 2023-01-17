@@ -14,29 +14,29 @@ warnings.filterwarnings('ignore')
 class EuroDatabaseLoader(SchemaLoader):
     '''
     The present class inherits the 'SchemaLoader' class of 'table_schema' module.
-    It uses the inherited methods and variables, as well as, the helper functions of 'helper_loading' module.
+    It uses the inherited methods and variables, as well as, the helper functions of 'helper_loading' module. 
     It also introduces two instance variables and three types of methods.
     The 1st type ('implement_table_loading') implements the loading process by making use of the 2nd and 3rd type of methods.
     The 2nd type ('get_sql_insert_query') creates the table and sets the sql query that populates the table.
     The 3rd type ('extract_and_load_{table_name}') handles the extraction, transformation and loading of the data.
     '''
     def __init__(self, connection, postgres_tables, season_codes):
-
+        
         super().__init__(connection)
 
-        # the instance variables correspond to the two command line arguments
+        # the next two instance variables correspond to the two command line arguments
         self.postgres_tables = postgres_tables
         self.season_codes = season_codes
 
     def implement_table_loading(self):
         '''
-        This is the main instance method of the class.
+        This is the main instance method of the class. 
         It makes use of the remaining instance methods and provides a step by step implementation of the process.
-        '''
+        '''  
         for table in self.postgres_tables:
-
+                    
             print("\n-----------------------------------------------------------------------------------------------------")
-
+            
             # load table
             sql_insert_table = self.get_sql_insert_query(table)
             start_table = time()
@@ -49,19 +49,19 @@ class EuroDatabaseLoader(SchemaLoader):
                                                  != "E2018_RegularSeason_03_021_20181019_Header.json"]
                 getattr(self, f"extract_and_load_{table}")(season_code, json_success_filenames, json_success_filenames_header, sql_insert_table)
                 print("TimeCounterSeason", round(time() - start_season, 1), "sec  --- ", "TimeCounterTable:", round(time() - start_table, 1), "sec")
-
+                
             if table == 'box_score':
-
+                
                 # load players
-                sql_insert_players = self.get_sql_insert_query('players')
+                sql_insert_players = self.get_sql_insert_query('players')             
                 start_players = time()
                 print("\n-----------------------------------------------------------------------------------------------------")
                 print(f"\nLoading PLAYERS: all available seasons at once")
                 self.extract_and_load_players(sql_insert_players)
                 print("TimeCounterTable", round(time() - start_players, 1), "sec")
-
-                # load teams
-                sql_insert_teams = self.get_sql_insert_query('teams')
+                
+                # load teams             
+                sql_insert_teams = self.get_sql_insert_query('teams')             
                 start_teams = time()
                 print("\n-----------------------------------------------------------------------------------------------------")
                 print(f"\nLoading TEAMS: all available seasons at once")
@@ -69,7 +69,7 @@ class EuroDatabaseLoader(SchemaLoader):
                 print("TimeCounterTable", round(time() - start_teams, 1), "sec")
 
     def get_sql_insert_query(self, table):
-
+        
         # 'players' and 'teams' tables should first be dropped, otherwise they cannot be updated properly
         if table in ("players", "teams"):
             self.cursor.execute(f"DROP TABLE IF EXISTS {table}")
@@ -85,12 +85,12 @@ class EuroDatabaseLoader(SchemaLoader):
         # get the sql query that populates the table
         sql_insert = sql.SQL("INSERT INTO {} ({}) VALUES ({}) ON CONFLICT ({}) DO NOTHING")\
                         .format(sql.SQL(table),
-                                sql.SQL(', ').join(map(sql.Identifier, table_column_names)),
+                                sql.SQL(', ').join(map(sql.Identifier, list(table_column_names.keys()))),
                                 sql.SQL(', ').join(sql.Placeholder() * len(table_column_names)),
                                 sql.SQL(table_index))
-
+        
         return sql_insert
-                
+        
     def extract_and_load_header(self, season_code, json_success_filenames, json_success_filenames_header, sql_insert):
 
         ######### EXTRACT & TRANSFORM #########
@@ -145,10 +145,12 @@ class EuroDatabaseLoader(SchemaLoader):
         
         # strip columns that might contain redundant empty spaces
         df_merged = h.strip_header(df_merged)
-
-        # replace numpy null values (if any) with empty strings
-        df_merged = df_merged.replace(numpy.nan, "")
-
+        
+        # secure integers
+        for index, data_type in enumerate(list(self.table_column_names["header"].values())):
+            if data_type == "int":
+                df_merged[df_merged.columns[index]] = df_merged[df_merged.columns[index]].astype(int)
+                    
         ######### LOAD #########
 
         # load data on header table (populate per season)
@@ -156,8 +158,7 @@ class EuroDatabaseLoader(SchemaLoader):
 
             try:
                 
-                data_insert = [value if df_merged.columns[j] in ["date", "time"] \
-                               else str(value) for j, value in enumerate(df_merged.iloc[i])]
+                data_insert = [str(value) for value in df_merged.iloc[i]]
                 self.cursor.execute(sql_insert.as_string(self.connection), (data_insert))
                 self.connection.commit()
 
@@ -189,11 +190,7 @@ class EuroDatabaseLoader(SchemaLoader):
             json_file.close()
 
             data_a, data_b = json_data["Stats"]
-            try:
-                stats_a = h.get_team_stats(data_a)
-            except Exception as e:
-                print(e, game_id)
-                exit()
+            stats_a = h.get_team_stats(data_a)
             stats_b = h.get_team_stats(data_b)
             box_score = stats_a + stats_b
 
@@ -212,11 +209,16 @@ class EuroDatabaseLoader(SchemaLoader):
             # strip columns that might contain redundant empty spaces
             df_merged = h.strip_box_score(df_merged)
             
-            # re-order columns and replace numpy null values (if any) with empty strings
+            # re-order columns and replace numpy nulls with zeros
             columns_reordered = ["game_player_id", "game_id", "game", "round", "phase", "season_code"] \
                                 + list(df_merged.columns[2:-4])
-            df_merged = df_merged[columns_reordered].replace(numpy.nan, "")
-  
+            df_merged = df_merged[columns_reordered].replace(numpy.nan, 0)
+           
+            # secure integers
+            for index, data_type in enumerate(list(self.table_column_names["box_score"].values())):
+                if data_type == "int":
+                    df_merged[df_merged.columns[index]] = df_merged[df_merged.columns[index]].astype(int)
+                    
             ######### LOAD #########
 
             # load data on box_score table (populate per file)
@@ -232,6 +234,7 @@ class EuroDatabaseLoader(SchemaLoader):
 
                     print(e, "\ngame_player_id:", df_merged.iloc[i]["game_player_id"], "\n")
 
+
     def extract_and_load_players(self, sql_insert):
 
         ######### EXTRACT #########
@@ -243,28 +246,34 @@ class EuroDatabaseLoader(SchemaLoader):
 
         df_box["season_player_id"] = df_box[["season_code", "player_id", "team"]].agg("_".join, axis=1).str[1:]
         df_box[["min", "sec"]] = df_box["minutes"].fillna("00:00") \
-            .str.replace("DNP", "00:00") \
-            .str.split(":", expand=True)
+                                                  .str.replace("DNP", "00:00") \
+                                                  .str.split(":", expand=True)
         df_box["min"].replace(r'^\s*$', "00", regex=True, inplace=True)
         df_box["sec"].fillna("00", inplace=True)
         df_box["minutes"] = df_box["min"].astype('float') + df_box["sec"].astype('float') / 60
         df_box["is_playing"].mask(df_box["minutes"] > 0, 1.0, inplace=True)
         df_box = df_box[df_box["dorsal"] != "TOTAL"]
 
-        columns_to_sum = ["is_playing", "is_starter"] + self.table_column_names["players"][7:26]
+        columns_to_sum = ["is_playing", "is_starter"] + list(self.table_column_names["players"].keys())[7:26]
 
         for col in columns_to_sum:
             df_box[col] = df_box[col].astype('float')
 
         df_players = df_box.groupby("season_player_id") \
-            .agg(dict({col: ['first'] for col in ["season_code", "player_id", "player", "team"]},
-                      **{col: ['sum'] for col in columns_to_sum})).reset_index()
+                            .agg(dict({col: ['first'] for col in ["season_code", "player_id", "player", "team"]},
+                                    **{col: ['sum'] for col in columns_to_sum})).reset_index()
 
         for col in columns_to_sum[2:]:
             h.add_percentage_columns(df_players, col)
 
         df_players["minutes"] = df_players["minutes"].round(1)
+        df_players = df_players.replace(numpy.nan, 0)
         number_of_rows = len(df_players)
+
+        # secure integers
+        for index, data_type in enumerate(list(self.table_column_names["players"].values())):
+            if data_type == "int":
+                df_players[df_players.columns[index]] = df_players[df_players.columns[index]].astype(int)
 
         ######### LOAD #########
 
@@ -280,7 +289,7 @@ class EuroDatabaseLoader(SchemaLoader):
             except Exception as e:
 
                 print(e, "\nseason_player_id:", df_players.iloc[i]["season_player_id"], "\n")
-
+                
     def extract_and_load_teams(self, sql_insert):
 
         ######### EXTRACT #########
@@ -292,29 +301,34 @@ class EuroDatabaseLoader(SchemaLoader):
 
         df_box["season_team_id"] = df_box[["season_code", "team"]].agg("_".join, axis=1).str[1:]
         df_box[["min", "sec"]] = df_box["minutes"].fillna("00:00") \
-            .str.replace("DNP", "00:00") \
-            .str.split(":", expand=True)
+                                                  .str.replace("DNP", "00:00") \
+                                                  .str.split(":", expand=True)
         df_box["min"].replace(r'^\s*$', "00", regex=True, inplace=True)
         df_box["sec"].fillna("00", inplace=True)
         df_box["minutes"] = (df_box["min"].astype('float') + df_box["sec"].astype('float') / 60) / 5
         df_box["is_playing"].mask(df_box["minutes"] > 0, 1.0, inplace=True)
         df_box = df_box[df_box["dorsal"] == "TOTAL"]
 
-        columns_to_sum = ["is_playing"] + self.table_column_names["teams"][4:23]
+        columns_to_sum = ["is_playing"] + list(self.table_column_names["teams"].keys())[4:23]
 
         for col in columns_to_sum:
             df_box[col] = df_box[col].astype('float')
 
         df_teams = df_box.groupby("season_team_id") \
-            .agg(dict({col: ['first'] for col in ["season_code", "team"]},
-                      **{col: ['sum'] for col in columns_to_sum})).reset_index()
+                         .agg(dict({col: ['first'] for col in ["season_code", "team"]},
+                                 **{col: ['sum'] for col in columns_to_sum})).reset_index()
 
         for col in columns_to_sum[1:]:
             h.add_percentage_columns(df_teams, col)
 
         df_teams["minutes"] = df_teams["minutes"].round(1)
         number_of_rows = len(df_teams)
-
+        
+        # secure integers
+        for index, data_type in enumerate(list(self.table_column_names["teams"].values())):
+            if data_type == "int":
+                df_teams[df_teams.columns[index]] = df_teams[df_teams.columns[index]].astype(int)
+                
         ######### LOAD #########
 
         # load data on teams table (populate all seasons at once)
@@ -370,15 +384,17 @@ class EuroDatabaseLoader(SchemaLoader):
         
             # strip columns that might contain redundant empty spaces
             df_merged = h.strip_points(df_merged)
-
-            # add leading zeros
-            df_merged["NUM_ANOT"] = df_merged["NUM_ANOT"].apply(lambda x: '{:03d}'.format(x))
             
-            # re-order columns and replace numpy null values (if any) with empty strings
+            # re-order columns
             columns_reordered = ["game_point_id", "game_id", "game", "round", "phase", "season_code"] \
                                 + list(df_merged.columns[2:-4])
-            df_merged = df_merged[columns_reordered].replace(numpy.nan, "")
-
+            df_merged = df_merged[columns_reordered] 
+            
+            # secure integers
+            for index, data_type in enumerate(list(self.table_column_names["points"].values())):
+                if data_type == "int":
+                    df_merged[df_merged.columns[index]] = df_merged[df_merged.columns[index]].astype(int)
+                
             ######### LOAD #########
 
             # load data on points table (populate per file)
@@ -386,8 +402,7 @@ class EuroDatabaseLoader(SchemaLoader):
 
                 try:
                           
-                    data_insert = [value if df_merged.columns[j] == "timestamp" \
-                                   else str(value) for j, value in enumerate(df_merged.iloc[i])]
+                    data_insert = [str(value) for value in df_merged.iloc[i]]
                     self.cursor.execute(sql_insert.as_string(self.connection), (data_insert))
                     self.connection.commit()
 
@@ -435,15 +450,17 @@ class EuroDatabaseLoader(SchemaLoader):
     
             # strip columns that might contain redundant empty spaces
             df_merged = h.strip_play_by_play(df_merged)
-
-            # add leading zeros
-            df_merged["NUMBEROFPLAY"] = df_merged["NUMBEROFPLAY"].apply(lambda x: '{:03d}'.format(x))
             
-           # re-order columns and replace numpy null values (if any) with empty strings
+            # re-order columns and replcae numpy nulls with zeros
             columns_reordered = ["game_play_id", "game_id", "game", "round", "phase", "season_code"] \
                                 + list(df_merged.columns[2:-4])
-            df_merged = df_merged[columns_reordered].replace(numpy.nan, "")
-
+            df_merged = df_merged[columns_reordered].replace(numpy.nan, 0)
+            
+            #  secure integers
+            for index, data_type in enumerate(list(self.table_column_names["play_by_play"].values())):
+                if data_type == "int":
+                    df_merged[df_merged.columns[index]] = df_merged[df_merged.columns[index]].astype(int)
+                
             ######### LOAD #########
 
             # load data on play_by_play table (populate per file)
@@ -506,10 +523,15 @@ class EuroDatabaseLoader(SchemaLoader):
         # strip columns that might contain redundant empty spaces
         df_merged = h.strip_comparison(df_merged)
 
-        # re-order columns and replace numpy null values (if any) with empty strings
+        # re-order columns and replace numpy nulls with zeros
         columns_reordered = ["game_id", "game", "round", "phase", "season_code"] \
                             + list(df_merged.columns[1:-4])
-        df_merged = df_merged[columns_reordered].replace(numpy.nan, "")
+        df_merged = df_merged[columns_reordered].replace(numpy.nan, 0)
+        
+        #  secure integers
+        for index, data_type in enumerate(list(self.table_column_names["comparison"].values())):
+            if data_type == "int":
+                df_merged[df_merged.columns[index]] = df_merged[df_merged.columns[index]].astype(int)
 
         ######### LOAD #########
 
@@ -523,5 +545,5 @@ class EuroDatabaseLoader(SchemaLoader):
                 self.connection.commit()
 
             except Exception as e:
-
+                exit()
                 print(e, "\ngame_id:", df_merged.iloc[i]["game_id"], "\n")
