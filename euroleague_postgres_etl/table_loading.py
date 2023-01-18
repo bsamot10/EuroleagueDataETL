@@ -385,10 +385,10 @@ class EuroDatabaseLoader(SchemaLoader):
             # strip columns that might contain redundant empty spaces
             df_merged = h.strip_points(df_merged)
             
-            # re-order columns
+            # re-order columns and replace numpy nulls with empty strings
             columns_reordered = ["game_point_id", "game_id", "game", "round", "phase", "season_code"] \
                                 + list(df_merged.columns[2:-4])
-            df_merged = df_merged[columns_reordered] 
+            df_merged = df_merged[columns_reordered].replace(numpy.nan, "")
             
             # secure integers
             for index, data_type in enumerate(list(self.table_column_names["points"].values())):
