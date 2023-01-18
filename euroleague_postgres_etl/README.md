@@ -49,12 +49,9 @@ In fact, every table has a unique identifier, which is useful for the avoidance 
 
 ### Brief description of the PostgreSQL tables
 
-The column names of each table can be found in the _table_schema_ module, and more specifically,
+The column names and data types of each table can be found in the _table_schema_ module, and more specifically,
 in the _table_column_names_ instance variable of the class _SchemaLoader_. 
-The instance methods _set__{table}__columns_ of the same class, determine the naming of the columns.
-
-In the present version of the program, apart from 'date', 'time' columns of the _header_ table 
-and 'timestamp' column of the _points_ table, all columns have been set to be of a _varchar_ data type.
+The instance methods _set__{table}__columns_ of the same class, determine the aforementioned variable.
 
 All tables are dependent from the _json_ files of the _Header_ API. 
 The full dependencies of each table and the name of the columns that uniquely identify a record (_index_), are presented below:
