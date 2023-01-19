@@ -1,8 +1,0 @@
-{
-"database": "<name of database>",
-"user": "<username>",
-"password": "<password>",
-"host": "<'localhost' or another IP>",
-"port": "<'5433' or '5432' or another port>"
-}
-                               
