@@ -7,4 +7,4 @@ An example of running the present program can be seen below:
 
 _python main.py_
 
-![default_execution_screenshot](https://github.com/bsamot10/EuroleagueProject/EuroleagueDataETL/blob/main/docs/images/euroleague_tables_to_csv.png)
+![default_execution_screenshot](https://github.com/bsamot10/EuroleagueProject/EuroleagueDataETL/docs/images/euroleague_tables_to_csv.png)
