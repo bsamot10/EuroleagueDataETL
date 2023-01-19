@@ -51,7 +51,7 @@ Fetching all the available _json_ files from the APIs of the latest Euroleague s
 
 _python main.py_
 
-![default_execution_screenshot](https://github.com/bsamot10/EuroleagueProject/blob/main/docs/images/euroleague_api_etl_example_1.png)
+![default_execution_screenshot](https://github.com/bsamot10/EuroleagueProject/blob/main/EuroleagueDataETL/docs/images/euroleague_api_etl_example_1.png)
 
 ### Example 2
 
@@ -59,4 +59,4 @@ Fetching all the available _json_ files from the _Header_, _PlaybyPlay_ and _Box
 
 _python main.py -api PlaybyPlay Boxscore -sc 2007-2022_
 
-![default_execution_screenshot](https://github.com/bsamot10/EuroleagueProject/blob/main/docs/images/euroleague_api_etl_example_2.png)
+![default_execution_screenshot](https://github.com/bsamot10/EuroleagueProject/blob/main/EuroleagueDataETL/docs/images/euroleague_api_etl_example_2.png)
