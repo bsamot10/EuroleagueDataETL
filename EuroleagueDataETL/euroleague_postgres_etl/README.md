@@ -1,6 +1,6 @@
 ### Description
 
-A Python program that loads the fetched _json_ files of the Euroleague APIs to a PostgreSQL database.
+A Python tool that loads the fetched _json_ files of the Euroleague APIs to a PostgreSQL database.
 It is compatible with the paths and filenames that the _euroleague_api_etl_ creates.
 
 ### Requirements
