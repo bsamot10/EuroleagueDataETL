@@ -1,6 +1,6 @@
 ### Description
 
-A simple Python program that fetches _json_ files from 7 possible Euroleague APIs.
+A Python tool that fetches _json_ files from 7 possible Euroleague APIs.
 To my knowledge in the above APIs no data exist before the 2007-2008 season.
 
 ### Example data
