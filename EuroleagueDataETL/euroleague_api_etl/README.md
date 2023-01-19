@@ -1,7 +1,7 @@
 ### Description
 
 A Python tool that fetches _json_ files from 7 possible Euroleague APIs.
-To my knowledge in the Euroleague APIs no data exist before the 2007-2008 season.
+To my knowledge in the Euroleague APIs no data exists before the 2007-2008 season.
 
 ### Example data
 URLs for each available API from the 1st game (_gamecode=1_) of the 2022-2023 Euroleague season (_seasoncode=E2022_):
