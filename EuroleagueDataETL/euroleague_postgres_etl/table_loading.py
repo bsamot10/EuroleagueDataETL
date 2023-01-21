@@ -114,7 +114,7 @@ class EuroDatabaseLoader(SchemaLoader):
                 df[key] = df_json[value]
             df.insert(0, "time", [time_converted])
             df.insert(0, "date", [date_converted])
-            df.insert(0, "game", df[["code_team_a", "code_team_b"]].agg("-".join, axis=1))            
+            df.insert(0, "game", df[["team_id_a", "team_id_b"]].agg("-".join, axis=1))            
             df.insert(0, "game_id", [game_id])
             dfs_header.append(df)          
         df_header = pd.concat(dfs_header)
@@ -171,7 +171,8 @@ class EuroDatabaseLoader(SchemaLoader):
         ######### EXTRACT & TRANSFORM #########
 
         # extract data from the json files of header
-        df_game_header = h.get_game_header_df(json_success_filenames_header, season_code)
+        df_game_header = h.get_game_header_df(json_success_filenames_header, season_code)\
+                          .drop(columns=["team_id_a", "team_id_b"])
         
         # get the json files of box_score
         json_success_filenames_box = [filename for filename in json_success_filenames \
@@ -197,7 +198,7 @@ class EuroDatabaseLoader(SchemaLoader):
             df_box_score = pd.DataFrame(box_score)
             number_of_rows = df_box_score.shape[0]
             
-            player_ids = df_box_score["Player_ID"]
+            player_ids = df_box_score["Player_ID"].str.strip()
             game_player_ids = [f"{game_id}_{player_id}" for player_id in player_ids]
             df_box_score.insert(0, "game_id", [game_id for i in range(number_of_rows)])
             df_box_score.insert(0, "game_player_id", game_player_ids)
@@ -244,7 +245,7 @@ class EuroDatabaseLoader(SchemaLoader):
 
         ######### TRANSFORM #########
 
-        df_box["season_player_id"] = df_box[["season_code", "player_id", "team"]].agg("_".join, axis=1).str[1:]
+        df_box["season_player_id"] = df_box[["season_code", "player_id", "team_id"]].agg("_".join, axis=1).str[1:]
         df_box[["min", "sec"]] = df_box["minutes"].fillna("00:00") \
                                                   .str.replace("DNP", "00:00") \
                                                   .str.split(":", expand=True)
@@ -260,7 +261,7 @@ class EuroDatabaseLoader(SchemaLoader):
             df_box[col] = df_box[col].astype('float')
 
         df_players = df_box.groupby("season_player_id") \
-                            .agg(dict({col: ['first'] for col in ["season_code", "player_id", "player", "team"]},
+                            .agg(dict({col: ['first'] for col in ["season_code", "player_id", "player", "team_id"]},
                                     **{col: ['sum'] for col in columns_to_sum})).reset_index()
 
         for col in columns_to_sum[2:]:
@@ -299,7 +300,7 @@ class EuroDatabaseLoader(SchemaLoader):
 
         ######### TRANSFORM #########
 
-        df_box["season_team_id"] = df_box[["season_code", "team"]].agg("_".join, axis=1).str[1:]
+        df_box["season_team_id"] = df_box[["season_code", "team_id"]].agg("_".join, axis=1).str[1:]
         df_box[["min", "sec"]] = df_box["minutes"].fillna("00:00") \
                                                   .str.replace("DNP", "00:00") \
                                                   .str.split(":", expand=True)
@@ -315,7 +316,7 @@ class EuroDatabaseLoader(SchemaLoader):
             df_box[col] = df_box[col].astype('float')
 
         df_teams = df_box.groupby("season_team_id") \
-                         .agg(dict({col: ['first'] for col in ["season_code", "team"]},
+                         .agg(dict({col: ['first'] for col in ["season_code", "team_id"]},
                                  **{col: ['sum'] for col in columns_to_sum})).reset_index()
 
         for col in columns_to_sum[1:]:
@@ -350,8 +351,9 @@ class EuroDatabaseLoader(SchemaLoader):
         ######### EXTRACT & TRANSFORM #########
 
         # extract data from the json files of header
-        df_game_header = h.get_game_header_df(json_success_filenames_header, season_code)
-        
+        df_game_header = h.get_game_header_df(json_success_filenames_header, season_code)\
+                          .drop(columns=["team_id_a", "team_id_b"])
+
         # get the json files of points
         json_success_filenames_points = [filename for filename in json_success_filenames \
                                          if "Points" in filename and filename \
@@ -415,7 +417,8 @@ class EuroDatabaseLoader(SchemaLoader):
         ######### EXTRACT & TRANSFORM #########
 
         # extract data from the json files of header
-        df_game_header = h.get_game_header_df(json_success_filenames_header, season_code)
+        df_game_header = h.get_game_header_df(json_success_filenames_header, season_code)\
+                          .drop(columns=["team_id_a", "team_id_b"])
         
         # get the json files of play_by_play
         json_success_filenames_play = [filename for filename in json_success_filenames \
@@ -524,8 +527,8 @@ class EuroDatabaseLoader(SchemaLoader):
         df_merged = h.strip_comparison(df_merged)
 
         # re-order columns and replace numpy nulls with zeros
-        columns_reordered = ["game_id", "game", "round", "phase", "season_code"] \
-                            + list(df_merged.columns[1:-4])
+        columns_reordered = ["game_id", "game", "round", "phase", "season_code", "team_id_a", "team_id_b"] \
+                            + list(df_merged.columns[1:-6])
         df_merged = df_merged[columns_reordered].replace(numpy.nan, 0)
         
         #  secure integers

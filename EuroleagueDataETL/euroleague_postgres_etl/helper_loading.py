@@ -1,5 +1,6 @@
 import pandas as pd
 import json
+import numpy
 
 def get_extra_time_df(extra_time_columns, box_score_data, map_table_columns_to_json_box):
     '''
@@ -55,7 +56,7 @@ def get_game_header_df(json_success_filenames_header, season_code):
     game_header = []
     
     for json_filename in json_success_filenames_header:
-        round = json_filename.split("_")[2]
+        _round = json_filename.split("_")[2]
         game_code = json_filename.split("_")[3]
         game_id = f"{season_code.strip('E')}_{game_code}"
         json_path = fr"../euroleague_json_data/{season_code}/success/{json_filename}"
@@ -63,29 +64,30 @@ def get_game_header_df(json_success_filenames_header, season_code):
         json_data = json.load(json_file)
         json_file.close()            
         game = json_data["CodeTeamA"].strip() + "-" + json_data["CodeTeamB"].strip()
+        team_id_a = json_data["CodeTeamA"].strip()
+        team_id_b = json_data["CodeTeamB"].strip()
         phase = json_data["Phase"].strip()
-        game_header.append((game_id, game, round, phase, season_code))
+        game_header.append((game_id, game, _round, phase, season_code, team_id_a, team_id_b))
         
-    df_game_header = pd.DataFrame(game_header, columns=["game_id", "game", "round", "phase", "season_code"])
+    df_game_header = pd.DataFrame(game_header, columns=["game_id", "game", "round", "phase", "season_code", "team_id_a", "team_id_b"])
     
     return df_game_header
 
 def add_percentage_columns(df, col):
     '''
-    A helper function for the loading of 'players' and 'teams' table. 
-    It updates a dataframe by adding columns that represent per game and percentage statistics.
+    A helper function for the loading of 'players' and 'teams' table. It updates a dataframe by adding columns that represent percentage statistics.
     '''
     df[col + "_per_game"] = (df[col] / df["is_playing"]).round(2)
     if "attempted" in col:
         col_percentage = col.replace("_attempted", "_percentage")
         df[col_percentage] = (df[col.replace("_attempted", "_made")] / df[col]).round(3)
-
+                             
 def strip_header(df):
     '''
     A helper function stripping the 'header' columns that might contain redundant empty spaces.
     '''
-    df["code_team_a"] = df["code_team_a"].str.strip()
-    df["code_team_b"] = df["code_team_b"].str.strip()
+    df["team_id_a"] = df["team_id_a"].str.strip()
+    df["team_id_b"] = df["team_id_b"].str.strip()
     df["score_a"] = df["score_a"].str.strip()
     df["score_b"] = df["score_b"].str.strip()
     df["capacity"] = df["capacity"].str.strip()
@@ -97,7 +99,7 @@ def strip_header(df):
     df["season_code"] = df["season_code"].str.strip()
     
     return df
-
+    
 def strip_box_score(df):
     '''
     A helper function stripping the 'box_score' table columns that might contain redundant empty spaces.
@@ -149,3 +151,6 @@ def strip_comparison(df):
     df["puntosMaxLeadB"] = df["puntosMaxLeadB"].str.strip()
 
     return df
+
+    
+    

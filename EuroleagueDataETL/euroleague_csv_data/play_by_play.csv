@@ -1,4 +1,4 @@
-game_play_id,game_id,game,round,phase,season_code,quarter,type,number_of_play,code_team,player_id,play_type,player,team,dorsal,minute,marker_time,points_a,points_b,comment,play_info
+game_play_id,game_id,game,round,phase,season_code,quarter,type,number_of_play,team_id,player_id,play_type,player,team,dorsal,minute,marker_time,points_a,points_b,comment,play_info
 2007_001_002,2007_001,OLY-BAS,1,REGULAR SEASON,E2007,q1,0,2,BAS,PCBX,3FGM,PRIGIONI_ PABLO,BASKONIA,5,1,09:00,0,3,,Three Pointer (1/1 -  3 pt)
 2007_001_003,2007_001,OLY-BAS,1,REGULAR SEASON,E2007,q1,0,3,BAS,PCBY,AS,SPLITTER_ TIAGO,BASKONIA,21,1,09:00,0,0,,Assist (1)
 2007_001_004,2007_001,OLY-BAS,1,REGULAR SEASON,E2007,q1,0,4,OLY,PTFV,2FGA,WOODS_ QYNTEL,OLYMPIACOS PIRAEUS B.C.,6,1,09:00,0,0,,Missed Two Pointer (0/1 -  0 pt)
