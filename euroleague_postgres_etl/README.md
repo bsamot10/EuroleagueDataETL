@@ -87,7 +87,7 @@ Loaing all tables by extracting data from the available _json_ files of the late
 
 _python main.py_
 
-![default_execution_screenshot](https://github.com/bsamot10/EuroleagueProject/blob/main/EuroleagueDataETL/docs/images/euroleague_postgres_etl_example_1.png)
+![default_execution_screenshot](https://github.com/bsamot10/EuroleagueDataETL/blob/main/docs/images/euroleague_postgres_etl_example_1.png)
 
 ### Example 2
 
@@ -95,4 +95,4 @@ Loading _header_, _play_by_lay_ and _box_score_ (and consequently _players_ and 
 
 _python main.py -tb header play_by_play box_score -sc 2007-2022_
 
-![default_execution_screenshot](https://github.com/bsamot10/EuroleagueProject/blob/main/EuroleagueDataETL/docs/images/euroleague_postgres_etl_example_2.png)
+![default_execution_screenshot](https://github.com/bsamot10/EuroleagueDataETL/blob/main/docs/images/euroleague_postgres_etl_example_2.png)
