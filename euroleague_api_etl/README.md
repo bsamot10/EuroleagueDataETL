@@ -49,7 +49,7 @@ The process should then be re-started manually from the season of interruption (
 
 Fetching all the available _json_ files from the APIs of the latest Euroleague season: 
 
-_python main.py_
+```python main.py```
 
 ![default_execution_screenshot](https://github.com/bsamot10/EuroleagueDataETL/blob/main/docs/images/euroleague_api_etl_example_1.png)
 
@@ -57,6 +57,6 @@ _python main.py_
 
 Fetching all the available _json_ files from the _Header_, _PlaybyPlay_ and _BoxScore_ APIs of the Euroleague seasons _2007-08_ until _2022-23_: 
 
-_python main.py -api PlaybyPlay Boxscore -sc 2007-2022_
+```python main.py -api PlaybyPlay Boxscore -sc 2007-2022```
 
 ![default_execution_screenshot](https://github.com/bsamot10/EuroleagueDataETL/blob/main/docs/images/euroleague_api_etl_example_2.png)
