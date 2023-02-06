@@ -85,7 +85,7 @@ The _players_ and _teams_ tables are created from the _box_score_ table and they
 
 Loaing all tables by extracting data from the available _json_ files of the latest Euroleague season: 
 
-_python main.py_
+```python main.py```
 
 ![default_execution_screenshot](https://github.com/bsamot10/EuroleagueDataETL/blob/main/docs/images/euroleague_postgres_etl_example_1.png)
 
@@ -93,6 +93,6 @@ _python main.py_
 
 Loading _header_, _play_by_lay_ and _box_score_ (and consequently _players_ and _teams_) tables from the Euroleague seasons _2007-08_ until _2022-23_: 
 
-_python main.py -tb header play_by_play box_score -sc 2007-2022_
+```python main.py -tb header play_by_play box_score -sc 2007-2022```
 
 ![default_execution_screenshot](https://github.com/bsamot10/EuroleagueDataETL/blob/main/docs/images/euroleague_postgres_etl_example_2.png)
