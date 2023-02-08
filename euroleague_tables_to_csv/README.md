@@ -1,6 +1,6 @@
 ### Description
 
-A Python tool that creates one csv file for each available table. 
+A Python tool that creates one _csv_ file for each available table. 
 Each csv file includes all the content of the table. 
 The results are saved in a folder with name 'euroleague_csv_data'. 
 An example of running the present program can be seen below:
