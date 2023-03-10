@@ -4,7 +4,7 @@ Python tools for Extraction, Transformation and Loading of Euroleague data.
 ### Brief description of existing folders
 
 ##### euroleague_api_etl
-A Python tool that fetches _json_ files from 7 possible Euroleague APIs.
+A Python tool that fetches _json_ files from up to 7 Euroleague APIs.
 
 ##### euroleague_json_data
 A sample of the _json_ files that are fecthed by the _euroleague_api_etl_ tool.
