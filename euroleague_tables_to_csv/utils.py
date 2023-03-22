@@ -40,6 +40,8 @@ def table_to_csv(table, order_by_col, connection):
         start = time.time()
         if table == "box_score":
             query = f"select * from {table}"
+        elif table == "players":
+            query = f"select * from {table} order by {order_by_col}, season_code"
         else:
             query = f"select * from {table} order by {order_by_col}"
         df = io_sql.read_sql_query(query, connection)
