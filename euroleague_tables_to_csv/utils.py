@@ -38,7 +38,10 @@ def table_to_csv(table, order_by_col, connection):
     print(f"\n{table}_to_csv")
     try:
         start = time.time()
-        query = f"select * from {table} order by {order_by_col}"
+        if table == "box_score":
+            query = f"select * from {table}"
+        else:
+            query = f"select * from {table} order by {order_by_col}"
         df = io_sql.read_sql_query(query, connection)
         df.to_csv(f"../euroleague_csv_data/{table}.csv", index=False)
         print("time_counter:", round(time.time() - start, 1), "sec")
