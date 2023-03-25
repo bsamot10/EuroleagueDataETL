@@ -108,7 +108,7 @@ def strip_box_score(df):
     df["Team"] = df["Team"].str.strip()
     df["Dorsal"] = df["Dorsal"].str.strip()
     df["Minutes"] = df["Minutes"].str.strip()
-    df["Player"] = df["Player"].str.strip().str.replace(",", "_")
+    df["Player"] = df["Player"].str.strip()
     
     return df
 
@@ -119,12 +119,13 @@ def strip_points(df):
     df["TEAM"] = df["TEAM"].str.strip()
     df["ID_PLAYER"] = df["ID_PLAYER"].str.strip()
     df["ID_ACTION"] = df["ID_ACTION"].str.strip()
+    df["ACTION"] = df["ACTION"].str.strip()
     df["ZONE"] = df["ZONE"].str.strip()
     df["FASTBREAK"] = df["FASTBREAK"].str.strip()
     df["SECOND_CHANCE"] = df["SECOND_CHANCE"].str.strip()
     df["POINTS_OFF_TURNOVER"] = df["POINTS_OFF_TURNOVER"].str.strip()
     df["CONSOLE"] = df["CONSOLE"].str.strip()
-    df["PLAYER"] = df["PLAYER"].str.strip().str.replace(",", "_")
+    df["PLAYER"] = df["PLAYER"].str.strip()
     
     return df
     
@@ -135,7 +136,11 @@ def strip_play_by_play(df):
     df["CODETEAM"] = df["CODETEAM"].str.strip()
     df["PLAYER_ID"] = df["PLAYER_ID"].str.strip()
     df["PLAYTYPE"] = df["PLAYTYPE"].str.strip()
-    df["PLAYER"] = df["PLAYER"].str.strip().str.replace(",", "_")
+    df["PLAYINFO"] = df["PLAYINFO"].str.strip()
+    df["MARKERTIME"] = df["MARKERTIME"].str.strip()
+    df["PLAYER"] = df["PLAYER"].str.strip().replace(numpy.nan, "")
+    df["TEAM"] = df["TEAM"].str.strip().replace(numpy.nan, "")
+    df["DORSAL"] = df["DORSAL"].str.strip().replace(numpy.nan, "")
 
     return df
 

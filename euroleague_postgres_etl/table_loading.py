@@ -454,7 +454,7 @@ class EuroDatabaseLoader(SchemaLoader):
             # strip columns that might contain redundant empty spaces
             df_merged = h.strip_play_by_play(df_merged)
             
-            # re-order columns and replcae numpy nulls with zeros
+            # re-order columns and replace numpy nulls with zeros
             columns_reordered = ["game_play_id", "game_id", "game", "round", "phase", "season_code"] \
                                 + list(df_merged.columns[2:-4])
             df_merged = df_merged[columns_reordered].replace(numpy.nan, 0)
