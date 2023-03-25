@@ -148,12 +148,12 @@ def strip_comparison(df):
     '''
     A helper function stripping the 'comparison' table columns that might contain redundant empty spaces.
     '''
-    df["prevA"] = df["prevA"].str.strip()
-    df["strA"] = df["strA"].str.strip()
-    df["puntosMaxLeadA"] = df["puntosMaxLeadA"].str.strip()
-    df["prevB"] = df["prevB"].str.strip()
-    df["strB"] = df["strB"].str.strip()
-    df["puntosMaxLeadB"] = df["puntosMaxLeadB"].str.strip()
+    df["prevA"] = df["prevA"].str.strip().replace(numpy.nan, "")
+    df["strA"] = df["strA"].str.strip().replace(numpy.nan, "")
+    df["puntosMaxLeadA"] = df["puntosMaxLeadA"].str.strip().replace(numpy.nan, "")
+    df["prevB"] = df["prevB"].str.strip().replace(numpy.nan, "")
+    df["strB"] = df["strB"].str.strip().replace(numpy.nan, "")
+    df["puntosMaxLeadB"] = df["puntosMaxLeadB"].str.strip().replace(numpy.nan, "")
 
     return df
 
