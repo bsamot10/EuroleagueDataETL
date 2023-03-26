@@ -45,6 +45,13 @@ def table_to_csv(table, order_by_col, connection):
         else:
             query = f"select * from {table} order by {order_by_col}"
         df = io_sql.read_sql_query(query, connection)
+        if table == "play_by_play":
+            df["points_a"] = df["points_a"].astype(str)
+            df["points_b"] = df["points_b"].astype(str)
+            for i in range(len(df)):
+                if (df["points_a"].iloc[i] == "0") & (df["points_b"].iloc[i] == "0"):
+                    df["points_a"].values[i] = ""
+                    df["points_b"].values[i] = ""
         df.to_csv(f"../euroleague_csv_data/{table}.csv", index=False)
         print("time_counter:", round(time.time() - start, 1), "sec")
     except Exception as e:
