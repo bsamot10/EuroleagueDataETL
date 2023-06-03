@@ -196,6 +196,8 @@ class EuroDatabaseLoader(SchemaLoader):
             box_score = stats_a + stats_b
 
             df_box_score = pd.DataFrame(box_score)
+            if "Plusminus" in df_box_score.columns:
+                df_box_score = df_box_score.drop(columns=["Plusminus"])
             number_of_rows = df_box_score.shape[0]
             
             player_ids = df_box_score["Player_ID"].str.strip()
