@@ -113,8 +113,7 @@ class EuroDatabaseLoader(SchemaLoader):
         for json_filename in json_success_filenames_header:
             game_code = json_filename.split("_")[3]
             game_id = f"{season_code}_{game_code}"
-            df_json = pd.read_json(fr"../data/{self.competition}_json/{season_code}/success/{json_filename}",
-                                   orient="index").transpose()
+            df_json = pd.read_json(fr"../data/{self.competition}_json/{season_code}/success/{json_filename}", orient="index").transpose()
             if game_id in ["U2017_136", "U2017_008"]:
                 df_json["CompetitionReducedName"] = "U2017"
             Date, Hour = df_json.iloc[0][["Date", "Hour"]]
@@ -516,8 +515,8 @@ class EuroDatabaseLoader(SchemaLoader):
         for json_filename in json_success_filenames_comp:
             game_code = json_filename.split("_")[3]
             game_id = f"{season_code}_{game_code}"
-            df = pd.read_json(fr"../data/{self.competition}_json/{season_code}/success/{json_filename}", orient="index") \
-                .transpose().drop(["minutoActual", "isLive"], axis=1)
+            df = pd.read_json(fr"../data/{self.competition}_json/{season_code}/success/{json_filename}", orient="index").transpose()\
+                   .drop(["minutoActual", "isLive"], axis=1)
             df.insert(0, "game_id", [game_id])
             dfs_comp.append(df)
         df_comp = pd.concat(dfs_comp)
