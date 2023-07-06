@@ -4,13 +4,13 @@ import numpy
 
 files_to_exclude = {table: [f"U2008_Last16_08_112_20090203_{table}.json",
                             f"U2008_Last16_09_119_20090210_{table}.json",
-                            f"U2008_RegularSeason_06_090_20090113_{table}.json",
                             f"U2008_RegularSeason_05_072_20090106_{table}.json",
+                            f"U2008_RegularSeason_06_090_20090113_{table}.json",
                             f"U2010_RegularSeason_02_032_20101123_{table}.json",
+                            f"U2013_RegularSeason_01_001_20131016_{table}.json",
                             f"U2013_RegularSeason_02_046_20131023_{table}.json",
                             f"U2013_RegularSeason_04_075_20131106_{table}.json",
                             f"U2013_RegularSeason_08_169_20131204_{table}.json",
-                            f"U2013_RegularSeason_01_001_20131016_{table}.json",
                             f"U2015_RegularSeason_01_013_20151014_{table}.json",
                             f"E2018_RegularSeason_03_021_20181019_{table}.json"]
                     for table in ["Header", "Boxscore", "Points", "PlaybyPlay", "Comparison", "ShootingGraphic"]}
