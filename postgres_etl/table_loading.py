@@ -177,8 +177,7 @@ class EuroDatabaseLoader(SchemaLoader):
 
                 print(e, "\ngame_id:", df_merged.iloc[i]["game_id"], "\n")
 
-    def extract_and_load_box_score(self, season_code, json_success_filenames, json_success_filenames_header,
-                                   sql_insert):
+    def extract_and_load_box_score(self, season_code, json_success_filenames, json_success_filenames_header, sql_insert):
 
         ######### EXTRACT & TRANSFORM #########
 
@@ -258,9 +257,7 @@ class EuroDatabaseLoader(SchemaLoader):
         ######### TRANSFORM #########
 
         df_box["season_player_id"] = df_box[["season_code", "player_id", "team_id"]].agg("_".join, axis=1)
-        df_box[["min", "sec"]] = df_box["minutes"].fillna("00:00") \
-            .str.replace("DNP", "00:00") \
-            .str.split(":", expand=True)
+        df_box[["min", "sec"]] = df_box["minutes"].fillna("00:00").str.replace("DNP", "00:00").str.split(":", expand=True)
         df_box["min"].replace(r'^\s*$', "00", regex=True, inplace=True)
         df_box["sec"].fillna("00", inplace=True)
         df_box["minutes"] = df_box["min"].astype('float') + df_box["sec"].astype('float') / 60
@@ -364,7 +361,7 @@ class EuroDatabaseLoader(SchemaLoader):
 
         # extract data from the json files of header
         df_game_header = h.get_game_header_df(self.competition, json_success_filenames_header, season_code) \
-            .drop(columns=["team_id_a", "team_id_b"])
+                          .drop(columns=["team_id_a", "team_id_b"])
 
         # get the json files of points
         json_success_filenames_points = [filename for filename in json_success_filenames \
@@ -430,7 +427,7 @@ class EuroDatabaseLoader(SchemaLoader):
 
         # extract data from the json files of header
         df_game_header = h.get_game_header_df(self.competition, json_success_filenames_header, season_code) \
-            .drop(columns=["team_id_a", "team_id_b"])
+                          .drop(columns=["team_id_a", "team_id_b"])
 
         # get the json files of play_by_play
         json_success_filenames_play = [filename for filename in json_success_filenames \
@@ -490,8 +487,7 @@ class EuroDatabaseLoader(SchemaLoader):
 
                     print(e, "\ngame_play_id:", df_merged.iloc[i]["game_play_id"], "\n")
 
-    def extract_and_load_comparison(self, season_code, json_success_filenames, json_success_filenames_header,
-                                    sql_insert):
+    def extract_and_load_comparison(self, season_code, json_success_filenames, json_success_filenames_header, sql_insert):
 
         ######### EXTRACT & TRANSFORM #########
 
