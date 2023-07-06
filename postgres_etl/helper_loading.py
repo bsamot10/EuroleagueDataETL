@@ -15,7 +15,6 @@ files_to_exclude = {table: [f"U2008_Last16_08_112_20090203_{table}.json",
                             f"E2018_RegularSeason_03_021_20181019_{table}.json"]
                     for table in ["Header", "Boxscore", "Points", "PlaybyPlay", "Comparison", "ShootingGraphic"]}
 
-
 def get_extra_time_df(extra_time_columns, box_score_data, map_table_columns_to_json_box):
     '''
     A helper function for the loading of 'header' table. It returns a dataframe with information of a game's extra times.
@@ -31,7 +30,6 @@ def get_extra_time_df(extra_time_columns, box_score_data, map_table_columns_to_j
 
     return extra_time_df
 
-
 def get_team_stats(box_score_data):
     '''
     A helper function for the loading of 'box_score' table. It returns a list with information of a team's game stats.
@@ -45,7 +43,6 @@ def get_team_stats(box_score_data):
     team_stats = players + [totals]
 
     return team_stats
-
 
 def get_quarters_df(quarters, json_data):
     '''
@@ -62,7 +59,6 @@ def get_quarters_df(quarters, json_data):
     quarters_df = pd.concat(dfs)
 
     return quarters_df
-
 
 def get_game_header_df(competition, json_success_filenames_header, season_code):
     '''
@@ -91,7 +87,6 @@ def get_game_header_df(competition, json_success_filenames_header, season_code):
 
     return df_game_header
 
-
 def add_percentage_columns(df, col):
     '''
     A helper function for the loading of 'players' and 'teams' table. It updates a dataframe by adding columns that represent percentage statistics.
@@ -100,7 +95,6 @@ def add_percentage_columns(df, col):
     if "attempted" in col:
         col_percentage = col.replace("_attempted", "_percentage")
         df[col_percentage] = (df[col.replace("_attempted", "_made")] / df[col]).round(3)
-
 
 def strip_header(df):
     '''
@@ -120,7 +114,6 @@ def strip_header(df):
 
     return df
 
-
 def strip_box_score(df):
     '''
     A helper function stripping the 'box_score' table columns that might contain redundant empty spaces.
@@ -132,7 +125,6 @@ def strip_box_score(df):
     df["Player"] = df["Player"].str.strip()
 
     return df
-
 
 def strip_points(df):
     '''
@@ -151,7 +143,6 @@ def strip_points(df):
 
     return df
 
-
 def strip_play_by_play(df):
     '''
     A helper function stripping the 'play_by_play' table columns that might contain redundant empty spaces.
@@ -166,7 +157,6 @@ def strip_play_by_play(df):
     df["DORSAL"] = df["DORSAL"].str.strip().replace(numpy.nan, "")
 
     return df
-
 
 def strip_comparison(df):
     '''
