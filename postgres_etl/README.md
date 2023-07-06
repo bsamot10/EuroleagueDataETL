@@ -93,8 +93,8 @@ Loading all tables by extracting data from the available _json_ files of the lat
 
 ### Example 2
 
-Loading _header_, _play_by_lay_ and _box_score_ (and consequently _players_ and _teams_) tables from the Eurocup seasons _2007-08_ until _2022-23_: 
+Loading _header_ and _comparison_ tables from the Eurocup seasons _2020-21_ until _2022-23_: 
 
-```python main.py -cp eurocup -tb header play_by_play box_score -sc 2007-2022```
+```python main.py -cp eurocup -tb header comparison -sc 2020-2022```
 
 ![default_execution_screenshot](https://github.com/bsamot10/EuroleagueDataETL/blob/main/docs/images/postgres_etl_example_2.png)
