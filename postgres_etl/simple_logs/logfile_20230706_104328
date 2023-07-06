@@ -1,0 +1,42 @@
+INPUT ARGUMENTS
+Namespace(competition='euroleague', season_code=['2022'], postgres_table=['header', 'box_score', 'points', 'play_by_play', 'comparison'])
+
+PARSED ARGUMENTS
+competition: euroleague
+season_codes: ['E2022']
+postgres_tables: ['header', 'box_score', 'points', 'play_by_play', 'comparison']
+
+-----------------------------------------------------------------------------------------------------
+
+Loading HEADER: SeasonCode E2022
+TimeCounterSeason 0.3 sec  ---  TimeCounterTable: 0.3 sec
+
+-----------------------------------------------------------------------------------------------------
+
+Loading BOX_SCORE: SeasonCode E2022
+TimeCounterSeason 0.7 sec  ---  TimeCounterTable: 0.7 sec
+
+-----------------------------------------------------------------------------------------------------
+
+Loading PLAYERS: all available seasons at once
+TimeCounterTable 0.6 sec
+
+-----------------------------------------------------------------------------------------------------
+
+Loading TEAMS: all available seasons at once
+TimeCounterTable 0.1 sec
+
+-----------------------------------------------------------------------------------------------------
+
+Loading POINTS: SeasonCode E2022
+TimeCounterSeason 3.0 sec  ---  TimeCounterTable: 3.0 sec
+
+-----------------------------------------------------------------------------------------------------
+
+Loading PLAY_BY_PLAY: SeasonCode E2022
+TimeCounterSeason 8.2 sec  ---  TimeCounterTable: 8.2 sec
+
+-----------------------------------------------------------------------------------------------------
+
+Loading COMPARISON: SeasonCode E2022
+TimeCounterSeason 0.2 sec  ---  TimeCounterTable: 0.2 sec

@@ -1,0 +1,23 @@
+INPUT ARGUMENTS
+Namespace(competition='eurocup')
+
+header_to_csv
+time_counter: 0.2 sec
+
+box_score_to_csv
+time_counter: 0.0 sec
+
+players_to_csv
+time_counter: 0.0 sec
+
+teams_to_csv
+time_counter: 0.0 sec
+
+points_to_csv
+time_counter: 0.0 sec
+
+play_by_play_to_csv
+time_counter: 0.0 sec
+
+comparison_to_csv
+time_counter: 0.0 sec

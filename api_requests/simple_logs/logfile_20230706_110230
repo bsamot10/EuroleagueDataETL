@@ -1,0 +1,40 @@
+INPUT ARGUMENTS
+Namespace(competition='eurocup', season_code=['2022'], euroleague_api=['Boxscore', 'ShootingGraphic', 'Points', 'Comparison', 'Evolution', 'PlaybyPlay'], failed_extractions_limit=500, game_code_start=1)
+
+PARSED ARGUMENTS
+competition: eurocup
+season_codes: ['U2022']
+euroleague_apis: ['Header', 'Boxscore', 'ShootingGraphic', 'Points', 'Comparison', 'Evolution', 'PlaybyPlay']
+failed_extractions_limit: 500
+game_code_start: 1
+
+SeasonCode: U2022  ---  Phase: RegularSeason  ---  Round: 01  ---  GameCode: 001  ---  TimeCounter: 0.0 min
+SeasonCode: U2022  ---  Phase: RegularSeason  ---  Round: 01  ---  GameCode: 002  ---  TimeCounter: 0.0 min
+SeasonCode: U2022  ---  Phase: RegularSeason  ---  Round: 01  ---  GameCode: 003  ---  TimeCounter: 0.1 min
+SeasonCode: U2022  ---  Phase: RegularSeason  ---  Round: 01  ---  GameCode: 004  ---  TimeCounter: 0.1 min
+SeasonCode: U2022  ---  Phase: RegularSeason  ---  Round: 01  ---  GameCode: 005  ---  TimeCounter: 0.1 min
+SeasonCode: U2022  ---  Phase: RegularSeason  ---  Round: 01  ---  GameCode: 006  ---  TimeCounter: 0.1 min
+SeasonCode: U2022  ---  Phase: RegularSeason  ---  Round: 01  ---  GameCode: 007  ---  TimeCounter: 0.1 min
+SeasonCode: U2022  ---  Phase: RegularSeason  ---  Round: 01  ---  GameCode: 008  ---  TimeCounter: 0.1 min
+SeasonCode: U2022  ---  Phase: RegularSeason  ---  Round: 01  ---  GameCode: 009  ---  TimeCounter: 0.1 min
+SeasonCode: U2022  ---  Phase: RegularSeason  ---  Round: 01  ---  GameCode: 010  ---  TimeCounter: 0.1 min
+SeasonCode: U2022  ---  Phase: RegularSeason  ---  Round: 02  ---  GameCode: 011  ---  TimeCounter: 0.2 min
+SeasonCode: U2022  ---  Phase: RegularSeason  ---  Round: 02  ---  GameCode: 012  ---  TimeCounter: 0.2 min
+SeasonCode: U2022  ---  Phase: RegularSeason  ---  Round: 02  ---  GameCode: 013  ---  TimeCounter: 0.2 min
+SeasonCode: U2022  ---  Phase: RegularSeason  ---  Round: 02  ---  GameCode: 014  ---  TimeCounter: 0.2 min
+SeasonCode: U2022  ---  Phase: RegularSeason  ---  Round: 02  ---  GameCode: 015  ---  TimeCounter: 0.2 min
+SeasonCode: U2022  ---  Phase: RegularSeason  ---  Round: 02  ---  GameCode: 016  ---  TimeCounter: 0.2 min
+SeasonCode: U2022  ---  Phase: RegularSeason  ---  Round: 02  ---  GameCode: 017  ---  TimeCounter: 0.2 min
+SeasonCode: U2022  ---  Phase: RegularSeason  ---  Round: 02  ---  GameCode: 018  ---  TimeCounter: 0.3 min
+SeasonCode: U2022  ---  Phase: RegularSeason  ---  Round: 02  ---  GameCode: 019  ---  TimeCounter: 0.3 min
+SeasonCode: U2022  ---  Phase: RegularSeason  ---  Round: 02  ---  GameCode: 020  ---  TimeCounter: 0.3 min
+SeasonCode: U2022  ---  Phase: RegularSeason  ---  Round: 03  ---  GameCode: 021  ---  TimeCounter: 0.3 min
+SeasonCode: U2022  ---  Phase: RegularSeason  ---  Round: 03  ---  GameCode: 022  ---  TimeCounter: 0.3 min
+SeasonCode: U2022  ---  Phase: RegularSeason  ---  Round: 03  ---  GameCode: 023  ---  TimeCounter: 0.3 min
+SeasonCode: U2022  ---  Phase: RegularSeason  ---  Round: 03  ---  GameCode: 024  ---  TimeCounter: 0.3 min
+SeasonCode: U2022  ---  Phase: RegularSeason  ---  Round: 03  ---  GameCode: 025  ---  TimeCounter: 0.3 min
+SeasonCode: U2022  ---  Phase: RegularSeason  ---  Round: 03  ---  GameCode: 026  ---  TimeCounter: 0.4 min
+SeasonCode: U2022  ---  Phase: RegularSeason  ---  Round: 03  ---  GameCode: 027  ---  TimeCounter: 0.4 min
+SeasonCode: U2022  ---  Phase: RegularSeason  ---  Round: 03  ---  GameCode: 028  ---  TimeCounter: 0.4 min
+SeasonCode: U2022  ---  Phase: RegularSeason  ---  Round: 03  ---  GameCode: 029  ---  TimeCounter: 0.4 min
+SeasonCode: U2022  ---  Phase: RegularSeason  ---  Round: 03  ---  GameCode: 030  ---  TimeCounter: 0.4 min
