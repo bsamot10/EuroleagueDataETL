@@ -156,6 +156,9 @@ class EuroDatabaseLoader(SchemaLoader):
         # strip columns that might contain redundant empty spaces
         df_merged = h.strip_header(df_merged)
 
+        # correct cases where season_code = 'EUROLEAGUE'
+        df_merged["season_code"][df_merged["season_code"] == "EUROLEAGUE"] = season_code
+
         # secure integers
         for index, data_type in enumerate(list(self.table_column_names["header"].values())):
             if data_type == "int":
