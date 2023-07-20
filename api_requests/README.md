@@ -40,16 +40,16 @@ All the successfully loaded _json_ files from the API responses are placed in th
 
 All the failed URLs are included in text files inside the _failure_ sub-directories.
 
-### Meta data and logs
+### Meta-data and logs
 
-For each season's directory a meta data _json_ file is created that holds some useful information of the process.
+For each season's directory a meta-data _json_ file is created that holds some useful information of the process.
 
 A simple logfile that captures all the _print_ results is also available in the _simple_logs_ folder that is created in the current working directory.
 
 ### Program interruption
 
 If the program is interrupted there is an option for continuing from the point of interruption.
-Information for that is available in the _game_code_counter_ parameter of the meta_data _json_ file. 
+Information for that is available in the _game_code_counter_ parameter of the meta-data _json_ file. 
 
 The process should then be re-started manually from the season of interruption (_season_code_ argument should be updated accordingly), by adding the appropriate value in the command line argument of _game_code_start_ (should be equal to _game_code_counter_).
 
