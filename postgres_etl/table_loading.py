@@ -272,8 +272,8 @@ class EuroDatabaseLoader(SchemaLoader):
             df_box[col] = df_box[col].astype('float')
 
         df_players = df_box.groupby("season_player_id") \
-            .agg(dict({col: ['first'] for col in ["season_code", "player_id", "player", "team_id"]},
-                      **{col: ['sum'] for col in columns_to_sum})).reset_index()
+                           .agg(dict({col: ['first'] for col in ["season_code", "player_id", "player", "team_id"]},
+                                   **{col: ['sum'] for col in columns_to_sum})).reset_index()
 
         for col in columns_to_sum[2:]:
             h.add_percentage_columns(df_players, col)
