@@ -4,7 +4,7 @@ class SchemaLoader:
     It introduces three types of methods.
     The 1st type ('set_{table_name}_columns') sets the column names and data types of each table.
     The 2nd type ('add_columns') adds the columns that the 1st type has set.
-    The 3rd type ('create_unique_index') sets a unique index for each table.
+    The 3rd type ('create_primary_key') sets a unique identifier for each table.
     '''
     def __init__(self, connection):
         
@@ -350,29 +350,30 @@ class SchemaLoader:
             self.cursor.execute(f"ALTER TABLE {table} add COLUMN IF NOT EXISTS {col_name} {data_type}")
         self.connection.commit()   
 
-    def create_unique_index(self, table):
+    def create_primary_key(self, table):
         '''
-        The present method enables the indexing of a table by using the unique identifier column of the table.
+        The present method enables the creation of a primary key for each table as a side effect,
+        and it also returns the primary key as a string.
         ''' 
-        # map each table to its unique identifier column
-        map_table_to_index = {"header": "game_id",
-                              "box_score": "game_player_id",
-                              "players": "season_player_id",
-                              "teams": "season_team_id",
-                              "play_by_play": "game_play_id",
-                              "points": "game_point_id",
-                              "comparison": "game_id"}
+        # map each table to its primary key column
+        map_table_to_primary_key = {"header": "game_id",
+                                    "box_score": "game_player_id",
+                                    "players": "season_player_id",
+                                    "teams": "season_team_id",
+                                    "play_by_play": "game_play_id",
+                                    "points": "game_point_id",
+                                    "comparison": "game_id"}
     
-        # get the unqiue indentifier of the table
+        # get the primary key of the table
         truncated_table_name = '_'.join(table.split('_')[1:])
-        index = map_table_to_index[truncated_table_name]
+        primary_key = map_table_to_primary_key[truncated_table_name]
         
-        # set the indexing of the table
-        self.cursor.execute(f"CREATE UNIQUE INDEX IF NOT EXISTS index_{table}_{index} ON {table} ({index})")
+        # set the primary key of the table
+        self.cursor.execute(f"ALTER TABLE {table} ADD PRIMARY KEY ({primary_key})")
         
         self.connection.commit()
         
-        return index
+        return primary_key
 
 
             

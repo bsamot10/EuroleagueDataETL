@@ -56,29 +56,29 @@ in the _table_column_names_ instance variable of the class _SchemaLoader_.
 The instance methods _set__{table}__columns_ of the same class, determine the aforementioned variable.
 
 All tables are dependent from the _json_ files of the _Header_ URI. 
-The full dependencies of each table and the name of the columns that uniquely identify a record (_index_), are presented below:
+The full dependencies of each table and the name of the columns that uniquely identify a record (_primary key_), are presented below:
 
 * **header**
   * URI dependencies: _Header_, _Boxscore_
-  * Index column: _game_id_
+  * Primary key: _game_id_
 * **comparison**
   * URI dependencies: _Header_, _Comparison_, _ShootingGraphic_
-  * Index column: _game_id_
+  * Primary key: _game_id_
 * **box_score**
   * URI dependencies: _Header_, _Boxscore_
-  * Index column: _game_player_id_
+  * Primary key: _game_player_id_
 * **players**
   * URI dependencies: _Header_, _Boxscore_
-  * Index column: _season_player_id_
+  * Primary key: _season_player_id_
 * **teams**
   * URI dependencies: _Header_, _Boxscore_
-  * Index column: _season_team_id_
+  * Primary key: _season_team_id_
 * **points**
   * URI dependencies: _Header, Points_
-  * Index column: _game_point_id_
+  * Primary key: _game_point_id_
 * **play_by_play**
   * URI dependencies: _Header_, _PlaybyPlay_
-  * Index column: _game_play_id_
+  * Primary key: _game_play_id_
 
 The _players_ and _teams_ tables are created from the _box_score_ table and they are not directly dependent from the _Header_ and _Boxscore_ URIs. They are small tables containing the aggregated season stats of each player and team, and they are created once-off for all seasons every time the _box_score_ table is requested.
 

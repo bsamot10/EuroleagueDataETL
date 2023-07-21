@@ -89,14 +89,14 @@ class EuroDatabaseLoader(SchemaLoader):
         self.add_columns(table)
         truncated_table_name = '_'.join(table.split('_')[1:])
         table_column_names = self.table_column_names[truncated_table_name]
-        table_index = self.create_unique_index(table)
+        table_primary_key = self.create_primary_key(table)
 
         # get the sql query that populates the table
         sql_insert = sql.SQL("INSERT INTO {} ({}) VALUES ({}) ON CONFLICT ({}) DO NOTHING") \
             .format(sql.SQL(table),
                     sql.SQL(', ').join(map(sql.Identifier, list(table_column_names.keys()))),
                     sql.SQL(', ').join(sql.Placeholder() * len(table_column_names)),
-                    sql.SQL(table_index))
+                    sql.SQL(table_primary_key))
 
         return sql_insert
 
