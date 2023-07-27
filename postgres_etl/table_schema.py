@@ -366,4 +366,3 @@ class SchemaLoader:
         # set the primary key of the table
         self.cursor.execute(f"ALTER TABLE {table} ADD PRIMARY KEY ({table_primary_key})")
         self.connection.commit()
-    
