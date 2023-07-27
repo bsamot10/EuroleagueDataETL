@@ -63,8 +63,8 @@ def get_quarters_df(quarters, json_data):
 def get_game_header_df(competition, json_success_filenames_header, season_code):
     '''
     A helper function for the loading of every table (except 'header' table).
-    It returns a dataframe with the 'game_id', 'game', 'round', 'phase' and 'season_code'.
-    It is used for joining with each table on 'game_id', so that every table has the above columns.
+    It returns a dataframe with the 'game_id', 'game', 'round', 'phase', 'season_code', 'team_id_a' and 'team_id_b'.
+    The dataframe is used for joining with each table on 'game_id', so that every table has the above columns.
     '''
     game_header = []
 
