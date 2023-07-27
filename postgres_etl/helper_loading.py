@@ -46,7 +46,7 @@ def get_team_stats(box_score_data):
 
 def get_quarters_df(quarters, json_data):
     '''
-    A helper function for the loading of 'play_by_play' table. It creates a dataframe with information of a game's quarters.
+    A helper function for the loading of 'play_by_play' table. It returns a dataframe with information of a game's quarters.
     '''
     dfs = []
 
@@ -63,7 +63,7 @@ def get_quarters_df(quarters, json_data):
 def get_game_header_df(competition, json_success_filenames_header, season_code):
     '''
     A helper function for the loading of every table (except 'header' table).
-    It creates a dataframe with the 'game_id', 'game', 'round', 'phase' and 'season_code'.
+    It returns a dataframe with the 'game_id', 'game', 'round', 'phase' and 'season_code'.
     It is used for joining with each table on 'game_id', so that every table has the above columns.
     '''
     game_header = []
@@ -82,8 +82,7 @@ def get_game_header_df(competition, json_success_filenames_header, season_code):
         phase = json_data["Phase"].strip()
         game_header.append((game_id, game, _round, phase, season_code, team_id_a, team_id_b))
 
-    df_game_header = pd.DataFrame(game_header, columns=["game_id", "game", "round", "phase", "season_code", "team_id_a",
-                                                        "team_id_b"])
+    df_game_header = pd.DataFrame(game_header, columns=["game_id", "game", "round", "phase", "season_code", "team_id_a", "team_id_b"])
 
     return df_game_header
 
