@@ -186,7 +186,7 @@ class EuroDatabaseLoader(SchemaLoader):
 
         # extract data from the json files of header
         df_game_header = h.get_game_header_df(self.competition, json_success_filenames_header, season_code) \
-            .drop(columns=["team_id_a", "team_id_b"])
+                          .drop(columns=["team_id_a", "team_id_b"])
 
         # get the json files of box_score
         json_success_filenames_box = [filename for filename in json_success_filenames \
