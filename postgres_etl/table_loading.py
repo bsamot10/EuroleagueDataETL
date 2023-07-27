@@ -90,7 +90,12 @@ class EuroDatabaseLoader(SchemaLoader):
         truncated_table_name = '_'.join(table.split('_')[1:])
         table_column_names = self.table_column_names[truncated_table_name]
         table_primary_key = self.map_table_to_primary_key[truncated_table_name]
-        self.set_primary_key(table, table_primary_key)
+        
+        # set the primary key of the table, only if it does not already exist
+        query = f"select count(*) from information_schema.table_constraints tc " \
+                f"where tc.constraint_type = 'PRIMARY KEY' and tc.table_name = '{table}'"
+        if io_sql.read_sql_query(query, self.connection)["count"][0] == 0:
+            self.set_primary_key(table, table_primary_key)
 
         # get the sql query that populates the table
         sql_insert = sql.SQL("INSERT INTO {} ({}) VALUES ({}) ON CONFLICT ({}) DO NOTHING") \
