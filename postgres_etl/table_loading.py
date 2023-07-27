@@ -93,10 +93,10 @@ class EuroDatabaseLoader(SchemaLoader):
 
         # get the sql query that populates the table
         sql_insert = sql.SQL("INSERT INTO {} ({}) VALUES ({}) ON CONFLICT ({}) DO NOTHING") \
-            .format(sql.SQL(table),
-                    sql.SQL(', ').join(map(sql.Identifier, list(table_column_names.keys()))),
-                    sql.SQL(', ').join(sql.Placeholder() * len(table_column_names)),
-                    sql.SQL(table_primary_key))
+                        .format(sql.SQL(table),
+                                sql.SQL(', ').join(map(sql.Identifier, list(table_column_names.keys()))),
+                                sql.SQL(', ').join(sql.Placeholder() * len(table_column_names)),
+                                sql.SQL(table_primary_key))
 
         return sql_insert
 
