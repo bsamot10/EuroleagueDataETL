@@ -89,7 +89,8 @@ class EuroDatabaseLoader(SchemaLoader):
         self.add_columns(table)
         truncated_table_name = '_'.join(table.split('_')[1:])
         table_column_names = self.table_column_names[truncated_table_name]
-        table_primary_key = self.create_primary_key(table)
+        table_primary_key = self.map_table_to_primary_key[truncated_table_name]
+        self.set_primary_key(table, table_primary_key)
 
         # get the sql query that populates the table
         sql_insert = sql.SQL("INSERT INTO {} ({}) VALUES ({}) ON CONFLICT ({}) DO NOTHING") \
@@ -156,7 +157,7 @@ class EuroDatabaseLoader(SchemaLoader):
         # strip columns that might contain redundant empty spaces
         df_merged = h.strip_header(df_merged)
 
-        # correct cases where season_code = 'EUROLEAGUE'
+        # fix cases where season_code = 'EUROLEAGUE'
         df_merged["season_code"][df_merged["season_code"] == "EUROLEAGUE"] = season_code
 
         # secure integers
