@@ -39,8 +39,7 @@ class EuroDatabaseLoader(SchemaLoader):
         '''
         for table in self.postgres_tables:
 
-            print(
-                "\n-----------------------------------------------------------------------------------------------------")
+            print("\n-----------------------------------------------------------------------------------------------------")
 
             # load table
             competition_table = f"{self.competition}_{table}"
@@ -61,8 +60,7 @@ class EuroDatabaseLoader(SchemaLoader):
                 # load players
                 sql_insert_players = self.get_sql_insert_query(self.competition + '_players')
                 start_players = time()
-                print(
-                    "\n-----------------------------------------------------------------------------------------------------")
+                print("\n-----------------------------------------------------------------------------------------------------")
                 print(f"\nLoading PLAYERS: all available seasons at once")
                 self.extract_and_load_players(sql_insert_players)
                 print("TimeCounterTable", round(time() - start_players, 1), "sec")
@@ -70,8 +68,7 @@ class EuroDatabaseLoader(SchemaLoader):
                 # load teams
                 sql_insert_teams = self.get_sql_insert_query(self.competition + '_teams')
                 start_teams = time()
-                print(
-                    "\n-----------------------------------------------------------------------------------------------------")
+                print("\n-----------------------------------------------------------------------------------------------------")
                 print(f"\nLoading TEAMS: all available seasons at once")
                 self.extract_and_load_teams(sql_insert_teams)
                 print("TimeCounterTable", round(time() - start_teams, 1), "sec")
