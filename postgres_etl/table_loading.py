@@ -57,6 +57,7 @@ class EuroDatabaseLoader(SchemaLoader):
                       round(time() - start_table, 1), "sec")
 
             if table == "box_score":
+                
                 # load players
                 sql_insert_players = self.get_sql_insert_query(self.competition + '_players')
                 start_players = time()
