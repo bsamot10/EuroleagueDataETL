@@ -4,6 +4,7 @@ from itertools import chain
 import psycopg2
 import json
 
+
 def get_datetime_info():
 
     datetime_now = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -14,16 +15,20 @@ def get_datetime_info():
         
     return datetime_now, year_today
 
+
 class SimpleLogger:
     
     def __init__(self, out1, out2):
         self.out1 = out1
-        self.out2 = out2        
+        self.out2 = out2
+
     def write(self, *args, **kwargs):
         self.out1.write(*args, **kwargs)
-        self.out2.write(*args, **kwargs)        
+        self.out2.write(*args, **kwargs)
+
     def flush(self):
         pass
+
 
 def get_connection():
 
@@ -41,7 +46,8 @@ def get_connection():
     except Exception as e:
         print(e)
         exit()
-        
+
+
 class ConfigParser(ArgumentParser):
         
     def __init__(self, year_today, available_season_codes):
@@ -113,6 +119,3 @@ class ConfigParser(ArgumentParser):
             print("\nWrong input: 'postgres_table' is restricted to exist in", self.valid_postgres_tables, "\n")
         else:
             print("postgres_tables:", self.postgres_tables)
-
-
-

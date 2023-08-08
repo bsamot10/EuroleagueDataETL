@@ -1,4 +1,5 @@
 from table_schema import SchemaLoader
+from table_indexing import Indexer
 import helper_loading as h
 from psycopg2 import sql
 import pandas as pd
@@ -16,18 +17,19 @@ warnings.filterwarnings('ignore')
 class EuroDatabaseLoader(SchemaLoader):
     '''
     The present class inherits the 'SchemaLoader' class of 'table_schema' module.
-    It uses the inherited methods and variables, as well as, the helper functions of 'helper_loading' module.
-    It also introduces two instance variables and three types of methods.
+    It uses the inherited methods and variables from the 'SchemaLoader', as well as,
+    the 'Indexer' class of 'table_indexing' module and the helper functions of 'helper_loading' module.
+    It also introduces three instance variables and three types of methods.
     The 1st type ('implement_table_loading') implements the loading process by making use of the 2nd and 3rd type of methods.
     The 2nd type ('get_sql_insert_query') creates the table and sets the sql query that populates the table.
     The 3rd type ('extract_and_load_{table_name}') handles the extraction, transformation and loading of the data.
     '''
 
-    def __init__(self, connection, competition, season_codes, postgres_tables, ):
+    def __init__(self, connection, competition, season_codes, postgres_tables):
 
         super().__init__(connection)
 
-        # the next two instance variables correspond to the three command line arguments
+        # the next three instance variables correspond to the three command line arguments
         self.competition = competition
         self.season_codes = season_codes
         self.postgres_tables = postgres_tables
@@ -41,7 +43,7 @@ class EuroDatabaseLoader(SchemaLoader):
 
             print("\n-----------------------------------------------------------------------------------------------------")
 
-            # load table
+            # load table and set indices after loading
             competition_table = f"{self.competition}_{table}"
             sql_insert_table = self.get_sql_insert_query(competition_table)
             start_table = time()
@@ -53,26 +55,33 @@ class EuroDatabaseLoader(SchemaLoader):
                                                  if "Header" in filename and filename not in h.files_to_exclude["Header"]]
                 getattr(self, f"extract_and_load_{table}")(season_code, json_success_filenames,
                                                            json_success_filenames_header, sql_insert_table)
-                print("TimeCounterSeason", round(time() - start_season, 1), "sec  --- ", "TimeCounterTable:",
-                      round(time() - start_table, 1), "sec")
+                print("TimeCounterSeason", round(time() - start_season, 1), "sec  --- ",
+                      "TimeCounterTable:", round(time() - start_table, 1), "sec")
+            indexer = Indexer(competition_table)
+            indexer.set_indices(self.connection, self.cursor, table, start_table)
 
+            # when the requested table is box_score, build two additional tables
             if table == "box_score":
                 
-                # load players
-                sql_insert_players = self.get_sql_insert_query(self.competition + '_players')
+                # load players and set indices after loading
+                sql_insert_players = self.get_sql_insert_query(f"{self.competition}_players")
                 start_players = time()
                 print("\n-----------------------------------------------------------------------------------------------------")
                 print(f"\nLoading PLAYERS: all available seasons at once")
                 self.extract_and_load_players(sql_insert_players)
                 print("TimeCounterTable", round(time() - start_players, 1), "sec")
+                players_indexer = Indexer(f"{self.competition}_players")
+                players_indexer.set_indices(self.connection, self.cursor, "players", start_players)
 
-                # load teams
-                sql_insert_teams = self.get_sql_insert_query(self.competition + '_teams')
+                # load teams and set indices after loading
+                sql_insert_teams = self.get_sql_insert_query(f"{self.competition}_teams")
                 start_teams = time()
                 print("\n-----------------------------------------------------------------------------------------------------")
                 print(f"\nLoading TEAMS: all available seasons at once")
                 self.extract_and_load_teams(sql_insert_teams)
                 print("TimeCounterTable", round(time() - start_teams, 1), "sec")
+                teams_indexer = Indexer(f"{self.competition}_teams")
+                teams_indexer.set_indices(self.connection, self.cursor, "teams", start_teams)
 
     def get_sql_insert_query(self, table):
 
@@ -87,13 +96,11 @@ class EuroDatabaseLoader(SchemaLoader):
         self.add_columns(table)
         truncated_table_name = '_'.join(table.split('_')[1:])
         table_column_names = self.table_column_names[truncated_table_name]
-        table_primary_key = self.map_table_to_primary_key[truncated_table_name]
-        
-        # set the primary key of the table, only if it does not already exist
-        query = f"select count(*) from information_schema.table_constraints tc " \
-                f"where tc.constraint_type = 'PRIMARY KEY' and tc.table_name = '{table}'"
-        if io_sql.read_sql_query(query, self.connection)["count"][0] == 0:
-            self.set_primary_key(table, table_primary_key)
+
+        # initialize an indexer and set the primary key
+        indexer = Indexer(table)
+        table_primary_key = indexer.map_table_to_primary_key[truncated_table_name]
+        indexer.set_primary_key(self.connection, self.cursor, truncated_table_name)
 
         # get the sql query that populates the table
         sql_insert = sql.SQL("INSERT INTO {} ({}) VALUES ({}) ON CONFLICT ({}) DO NOTHING") \

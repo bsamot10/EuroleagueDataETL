@@ -2,6 +2,7 @@ from argparse import ArgumentParser
 from datetime import datetime, date
 from itertools import chain
 
+
 def get_datetime_info():
 
     datetime_now = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -12,16 +13,20 @@ def get_datetime_info():
         
     return datetime_now, year_today
 
+
 class SimpleLogger:
     
     def __init__(self, out1, out2):
         self.out1 = out1
-        self.out2 = out2        
+        self.out2 = out2
+
     def write(self, *args, **kwargs):
         self.out1.write(*args, **kwargs)
-        self.out2.write(*args, **kwargs)        
+        self.out2.write(*args, **kwargs)
+
     def flush(self):
         pass
+
 
 class ConfigParser(ArgumentParser):
         
@@ -114,4 +119,3 @@ class ConfigParser(ArgumentParser):
         elif self.game_code_start <= 0:
             print("\nWrong input: 'game_code_start' should be a positive integer\n")
             exit()      
-

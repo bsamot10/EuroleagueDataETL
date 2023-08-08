@@ -3,6 +3,7 @@ from datetime import datetime
 import os
 import sys
 
+
 def main():
 
     # create a simple logfile
@@ -37,6 +38,7 @@ def main():
     # try to get csv data from every table
     for table, order_by_col in tables_order_by_cols:
         table_to_csv(competition, table, order_by_col, connection)
+
 
 if __name__ == '__main__':
 

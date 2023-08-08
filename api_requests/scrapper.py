@@ -3,6 +3,7 @@ import requests
 import json
 import os
 
+
 class EuroScrapas:
     
     def __init__(self, competition, season_codes, euroleague_apis, failed_extractions_limit, game_code_start, datetime_now):
@@ -158,4 +159,3 @@ class EuroScrapas:
               f"GameCode:", "{:03d}".format(gc), " ---  TimeCounter:", round((time() - process_start_time) / 60, 1), "min")
             
         return Phase, Round, Date, meta_data_dict
-

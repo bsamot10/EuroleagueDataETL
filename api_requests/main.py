@@ -3,6 +3,7 @@ from scrapper import EuroScrapas
 import sys 
 import os
 
+
 def main():
     
     # get datetime info
@@ -31,8 +32,8 @@ def main():
     # initialize EuroScrapas and implement scrapping process
     euro_scrapas = EuroScrapas(competition, season_codes, euroleague_apis, failed_extractions_limit, game_code_start, datetime_now)
     euro_scrapas.implement_scrapping_process()
-      
+
+
 if __name__ == '__main__':
     
     main()
-

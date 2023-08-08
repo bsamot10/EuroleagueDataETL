@@ -82,6 +82,7 @@ The full dependencies of each table and the name of the columns that uniquely id
 
 The _players_ and _teams_ tables are created from the _box_score_ table and they are not directly dependent from the _Header_ and _Boxscore_ URIs. They are small tables containing the aggregated season stats of each player and team, and they are created once-off for all seasons every time the _box_score_ table is requested.
 
+Apart from the primary key, a few additional indices have been created for each table. The relevant index columns for each table, can be found in the _Indexer_ class of the _table_indexing_ module.
 
 ### Example 1 (default execution)
 

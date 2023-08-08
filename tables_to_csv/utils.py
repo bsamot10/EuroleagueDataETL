@@ -6,16 +6,20 @@ import time
 import warnings
 warnings.filterwarnings('ignore')
 
+
 class SimpleLogger:
     
     def __init__(self, out1, out2):
         self.out1 = out1
-        self.out2 = out2        
+        self.out2 = out2
+
     def write(self, *args, **kwargs):
         self.out1.write(*args, **kwargs)
-        self.out2.write(*args, **kwargs)        
+        self.out2.write(*args, **kwargs)
+
     def flush(self):
         pass
+
 
 class ConfigParser(ArgumentParser):
     def __init__(self):
@@ -25,6 +29,7 @@ class ConfigParser(ArgumentParser):
 
         # set instance variables
         self.competition = None
+
     def set_arguments(self):
         # set the command line arguments
         self.add_argument('-cp', '--competition', type=str, nargs='?', default="euroleague",
@@ -34,11 +39,14 @@ class ConfigParser(ArgumentParser):
         args = self.parse_args()
 
         return args
+
     def parse_arguments(self, args):
 
         # parse 'competition' argument
         self.competition = args.competition
         print("competition:", self.competition)
+
+
 def get_connection(competition):
 
     config_conn_file = open(f"../postgres_etl/config_connection.json")
@@ -55,7 +63,8 @@ def get_connection(competition):
     except Exception as e:
         print(e)
         exit()
-        
+
+
 def table_to_csv(competition, table, order_by_col, connection):
 
     print(f"\n{table}_to_csv")

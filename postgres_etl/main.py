@@ -3,6 +3,7 @@ from table_loading import EuroDatabaseLoader
 import sys 
 import os
 
+
 def main():
     
     # get datetime info and availability of data
@@ -34,7 +35,8 @@ def main():
     # initialize EuroDatabaseLoader and implement database loading process
     euro_database_loader = EuroDatabaseLoader(connection, competition, season_codes, postgres_tables)
     euro_database_loader.implement_table_loading()
-      
+
+
 if __name__ == '__main__':
     
     main()
