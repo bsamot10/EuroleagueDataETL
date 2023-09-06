@@ -43,7 +43,7 @@ class EuroDatabaseLoader(SchemaLoader):
 
             print("\n-----------------------------------------------------------------------------------------------------")
 
-            # load table and set indices after loading
+            # load table, and after loading, fix duplicate players (if necessary) and set indices
             competition_table = f"{self.competition}_{table}"
             sql_insert_table = self.get_sql_insert_query(competition_table)
             start_table = time()
@@ -57,6 +57,8 @@ class EuroDatabaseLoader(SchemaLoader):
                                                            json_success_filenames_header, sql_insert_table)
                 print("TimeCounterSeason", round(time() - start_season, 1), "sec  --- ",
                       "TimeCounterTable:", round(time() - start_table, 1), "sec")
+            if table in ("box_score", "points", "play_by_play"):
+                h.fix_duplicate_players(self.connection, self.cursor, self.competition, table, start_table)
             indexer = Indexer(competition_table)
             indexer.set_indices(self.connection, self.cursor, table, start_table)
 
