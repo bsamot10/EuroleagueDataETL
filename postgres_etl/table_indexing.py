@@ -25,11 +25,11 @@ class Indexer:
 
         # instance variable that maps each table to the indices
         self.map_table_to_indices = {"header": ["game", "team_id_a", "team_id_b"],
-                                     "box_score": ["game", "team_id", "player_id"],
-                                     "players": ["team_id", "player_id"],
+                                     "box_score": ["game", "team_id", "player_id", "player"],
+                                     "players": ["team_id", "player_id", "player"],
                                      "teams": ["team_id"],
-                                     "play_by_play": ["game", "team_id", "player_id"],
-                                     "points": ["game", "team_id", "player_id"],
+                                     "play_by_play": ["game", "team_id", "player_id", "player"],
+                                     "points": ["game", "team_id", "player_id", "player"],
                                      "comparison": ["game", "team_id_a", "team_id_b"]}
 
         # instance variable that facilitates the check of existing primary key and indices
