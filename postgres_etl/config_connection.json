@@ -1,7 +1,7 @@
 {
-"database": "euroleague",
-"user": "postgres",
-"password": "vince15",
-"host": "localhost",
-"port": "5432"
+"database": "<the name of the database>",
+"user": "<your username>",
+"password": "<your password>",
+"host": "<localhost or some other IP>",
+"port": "<5432 or 5433 or some other port>"
 }
