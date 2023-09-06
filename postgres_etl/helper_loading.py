@@ -1,3 +1,4 @@
+from time import time
 import pandas as pd
 import json
 import numpy
@@ -179,3 +180,28 @@ def strip_comparison(df):
     df["puntosMaxLeadB"] = df["puntosMaxLeadB"].str.strip().replace(numpy.nan, "")
 
     return df
+
+
+def fix_duplicate_players(connection, cursor, competition, table, start_table):
+    '''
+    A helper function fixing the cases where one player_id corresponds to more than one player names.
+    '''
+    query_temp_table = f"CREATE TEMP TABLE temp_tbl AS " \
+                       f"SELECT player_id, max(player) AS player " \
+                       f"FROM {competition}_{table} GROUP BY player_id " \
+                       f"HAVING count(distinct player) > 1 "
+
+    query_update_table = f"UPDATE {competition}_{table} AS update_tbl " \
+                         f"SET player = temp_tbl.player " \
+                         f"FROM temp_tbl " \
+                         f"WHERE update_tbl.player_id = temp_tbl.player_id"
+
+    query_drop_temp_table = "DROP TABLE temp_tbl"
+
+    start_fixing = time()
+    print(f"\nFixing Duplicate Players {table.upper()}")
+    for query in (query_temp_table, query_update_table, query_drop_temp_table):
+        cursor.execute(query)
+        connection.commit()
+    print("TimeCounterFixing:", round(time() - start_fixing, 1), "sec  --- ",
+          "TimeCounterTable:", round(time() - start_table, 1), "sec")
