@@ -184,13 +184,19 @@ def strip_comparison(df):
 
 def fix_duplicate_players(connection, cursor, competition, table, start_table):
     '''
-    A helper function fixing the cases where one player_id corresponds to more than one player names.
+    A helper function fixing the cases where one player_id corresponds to more than one player names and vice versa.
     '''
-    query_temp_table = f"CREATE TEMP TABLE temp_tbl AS " \
-                       f"SELECT player_id, max(player) AS player " \
-                       f"FROM {competition}_{table} GROUP BY player_id " \
-                       f"HAVING count(distinct player) > 1 "
-
+    if table == "box_score":
+        query_temp_table = f"CREATE TEMP TABLE temp_tbl AS " \
+                           f"SELECT player_id, max(player) AS player " \
+                           f"FROM {competition}_{table} WHERE dorsal != 'TOTAL' " \
+                           f"GROUP BY player_id HAVING count(distinct player) > 1 "
+    else:
+        query_temp_table = f"CREATE TEMP TABLE temp_tbl AS " \
+                           f"SELECT player_id, max(player) AS player " \
+                           f"FROM {competition}_{table} " \
+                           f"GROUP BY player_id HAVING count(distinct player) > 1 "
+		           
     query_update_table = f"UPDATE {competition}_{table} AS update_tbl " \
                          f"SET player = temp_tbl.player " \
                          f"FROM temp_tbl " \
@@ -200,8 +206,29 @@ def fix_duplicate_players(connection, cursor, competition, table, start_table):
 
     start_fixing = time()
     print(f"\nFixing Duplicate Players {table.upper()}")
+    
     for query in (query_temp_table, query_update_table, query_drop_temp_table):
         cursor.execute(query)
         connection.commit()
+        
+    if competition == "euroleague":
+        for wrong_id, correct_id in {'1': 'P000668', 'MAD991': 'PKSF', '001720': 'P001720', 'PSIE374368': 'P001479',
+                                     'AVD': 'PAVD', 'PTGY': 'PTHY', 'LJU1': 'P000437', 'MAL1': 'PLAC',
+                                     'BAM1': 'P000118', 'CAS GIU': 'P000273'}.items():
+            cursor.execute(f"UPDATE {competition}_{table} " \
+                           f"SET player_id = '{correct_id}' " \
+                           f"WHERE player_id = '{wrong_id}'")
+            connection.commit()
+    else:
+        for wrong_id, correct_id in {'P000375': 'P000378', 'WOJJAK': 'PLJI', 'P03463': 'P003463', 'PCPJ': 'P000254','KOL1': 'P000069',
+                                     'PMAL675546': 'P010442', '24': 'PKPR','P6604': 'P006604', 'P002447': 'P002457', 
+                                     'EITO11': 'P000231', '4': 'PADP', '000231': 'P000231','P002445': 'P002447',  '000132': 'P000132',
+                                     'wlo1': 'P000587', 'AVJ': 'PAVJ','OVA1': 'P000463', 'P03384': 'P003384', '3': 'P000732', 
+                                     'WRO1': 'PLBP', '124': 'PKGH', '001': 'P002148', 'z02': 'P001532', '115': 'P000434'}.items():
+            cursor.execute(f"UPDATE {competition}_{table} " \
+                           f"SET player_id = '{correct_id}' " \
+                           f"WHERE player_id = '{wrong_id}'")
+            connection.commit()        
+            
     print("TimeCounterFixing:", round(time() - start_fixing, 1), "sec  --- ",
           "TimeCounterTable:", round(time() - start_table, 1), "sec")
