@@ -196,7 +196,7 @@ def fix_duplicate_players(connection, cursor, competition, table, start_table):
                            f"SELECT player_id, max(player) AS player " \
                            f"FROM {competition}_{table} " \
                            f"GROUP BY player_id HAVING count(distinct player) > 1 "
-		           
+
     query_update_table = f"UPDATE {competition}_{table} AS update_tbl " \
                          f"SET player = temp_tbl.player " \
                          f"FROM temp_tbl " \
@@ -222,7 +222,7 @@ def fix_duplicate_players(connection, cursor, competition, table, start_table):
     else:
         for wrong_id, correct_id in {'P000375': 'P000378', 'WOJJAK': 'PLJI', 'P03463': 'P003463', 'PCPJ': 'P000254','KOL1': 'P000069',
                                      'PMAL675546': 'P010442', '24': 'PKPR','P6604': 'P006604', 'P002447': 'P002457', 
-                                     'EITO11': 'P000231', '4': 'PADP', '000231': 'P000231','P002445': 'P002447',  '000132': 'P000132',
+                                     'EITO11': 'P000231', '4': 'PADP', '000231': 'P000231','P002445': 'P002447', '000132': 'P000132',
                                      'wlo1': 'P000587', 'AVJ': 'PAVJ','OVA1': 'P000463', 'P03384': 'P003384', '3': 'P000732', 
                                      'WRO1': 'PLBP', '124': 'PKGH', '001': 'P002148', 'z02': 'P001532', '115': 'P000434'}.items():
             cursor.execute(f"UPDATE {competition}_{table} " \
