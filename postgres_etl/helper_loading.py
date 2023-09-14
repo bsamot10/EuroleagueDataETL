@@ -214,8 +214,8 @@ def fix_duplicate_players(connection, cursor, competition, table, start_table):
 
     if competition == "euroleague":
         for wrong_id, correct_id in {'1': 'P000668', 'MAD991': 'PKSF', '001720': 'P001720', 'PSIE374368': 'P001479',
-                                     'AVD': 'PAVD', 'PTGY': 'PTHY', 'LJU1': 'P000437', 'MAL1': 'PLAC',
-                                     'BAM1': 'P000118', 'CAS GIU': 'P000273'}.items():
+                                     'AVD': 'PAVD', 'PTGY': 'PTHY', 'LJU1': 'P000437', 'MAL1': 'PLAC', 'A1': 'PJDQ',
+                                     'BAM1': 'P000118', 'CAS GIU': 'P000273', '19': 'PLVZ', 'P000983': 'P003715'}.items():
             cursor.execute(f"UPDATE {competition}_{table} " \
                            f"SET player_id = '{correct_id}' " \
                            f"WHERE player_id = '{wrong_id}'")
