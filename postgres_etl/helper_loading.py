@@ -87,7 +87,8 @@ def get_game_header_df(competition, json_success_filenames_header, season_code):
         phase = json_data["Phase"].strip()
         game_header.append((game_id, game, _round, phase, season_code, team_id_a, team_id_b))
 
-    df_game_header = pd.DataFrame(game_header, columns=["game_id", "game", "round", "phase", "season_code", "team_id_a", "team_id_b"])
+    df_game_header = pd.DataFrame(game_header, columns=["game_id", "game", "round", "phase", "season_code", "team_id_a",
+                                                        "team_id_b"])
 
     return df_game_header
 
@@ -129,7 +130,7 @@ def strip_box_score(df):
     df["Team"] = df["Team"].str.strip()
     df["Dorsal"] = df["Dorsal"].str.strip()
     df["Minutes"] = df["Minutes"].str.strip()
-    df["Player"] = df["Player"].str.strip()
+    df["Player"] = df["Player"].str.strip().replace(numpy.nan, "").str.upper()
 
     return df
 
@@ -147,7 +148,7 @@ def strip_points(df):
     df["SECOND_CHANCE"] = df["SECOND_CHANCE"].str.strip()
     df["POINTS_OFF_TURNOVER"] = df["POINTS_OFF_TURNOVER"].str.strip()
     df["CONSOLE"] = df["CONSOLE"].str.strip()
-    df["PLAYER"] = df["PLAYER"].str.strip()
+    df["PLAYER"] = df["PLAYER"].str.strip().replace(numpy.nan, "").str.upper()
 
     return df
 
@@ -161,7 +162,7 @@ def strip_play_by_play(df):
     df["PLAYTYPE"] = df["PLAYTYPE"].str.strip()
     df["PLAYINFO"] = df["PLAYINFO"].str.strip()
     df["MARKERTIME"] = df["MARKERTIME"].str.strip()
-    df["PLAYER"] = df["PLAYER"].str.strip().replace(numpy.nan, "")
+    df["PLAYER"] = df["PLAYER"].str.strip().replace(numpy.nan, "").str.upper()
     df["TEAM"] = df["TEAM"].str.strip().replace(numpy.nan, "")
     df["DORSAL"] = df["DORSAL"].str.strip().replace(numpy.nan, "")
 
@@ -206,11 +207,11 @@ def fix_duplicate_players(connection, cursor, competition, table, start_table):
 
     start_fixing = time()
     print(f"\nFixing Duplicate Players {table.upper()}")
-    
+
     for query in (query_temp_table, query_update_table, query_drop_temp_table):
         cursor.execute(query)
         connection.commit()
-        
+
     if competition == "euroleague":
         for wrong_id, correct_id in {'1': 'P000668', 'MAD991': 'PKSF', '001720': 'P001720', 'PSIE374368': 'P001479',
                                      'AVD': 'PAVD', 'PTGY': 'PTHY', 'LJU1': 'P000437', 'MAL1': 'PLAC',
@@ -220,15 +221,27 @@ def fix_duplicate_players(connection, cursor, competition, table, start_table):
                            f"WHERE player_id = '{wrong_id}'")
             connection.commit()
     else:
-        for wrong_id, correct_id in {'P000375': 'P000378', 'WOJJAK': 'PLJI', 'P03463': 'P003463', 'PCPJ': 'P000254','KOL1': 'P000069',
-                                     'PMAL675546': 'P010442', '24': 'PKPR','P6604': 'P006604', 'P002447': 'P002457', 
-                                     'EITO11': 'P000231', '4': 'PADP', '000231': 'P000231','P002445': 'P002447', '000132': 'P000132',
-                                     'wlo1': 'P000587', 'AVJ': 'PAVJ','OVA1': 'P000463', 'P03384': 'P003384', '3': 'P000732', 
-                                     'WRO1': 'PLBP', '124': 'PKGH', '001': 'P002148', 'z02': 'P001532', '115': 'P000434'}.items():
+        for wrong_id, correct_id in {'P000375': 'P000378', 'WOJJAK': 'PLJI', 'P03463': 'P003463', 'PCPJ': 'P000254',
+                                     'KOL1': 'P000069', 'P03384': 'P003384', 'PMAL675546': 'P010442', '24': 'PKPR',
+                                     'P6604': 'P006604', 'P002447': 'P002457', '1977': 'PBGC', 'anwil24': 'PAGR',
+                                     'EITO11': 'P000231', '4': 'PADP', '000231': 'P000231', 'P002445': 'P002447',
+                                     '000132': 'P000132', 'wlo1': 'P000587', 'AVJ': 'PAVJ', 'OVA1': 'P000463',
+                                     '3': 'P000732', 'ven1': 'P000046', 'WRO1': 'PLBP', '124': 'PKGH', '001': 'P002148',
+                                     'z02': 'P001532', '115': 'P000434', '000375': 'P000378'}.items():
             cursor.execute(f"UPDATE {competition}_{table} " \
                            f"SET player_id = '{correct_id}' " \
                            f"WHERE player_id = '{wrong_id}'")
-            connection.commit()        
-            
+            connection.commit()
+        for player_id, update_name in {'P002004': 'BROWN, BRANDON (A)', 'P010477': 'BROWN, BRANDON (B)',
+                                       'PCSW': 'HAMILTON, JUSTIN (A)', 'P004399': 'HAMILTON, JUSTIN (B)',
+                                       'P002999': 'JOVANOVIC, NIKOLA (A)', 'P003264': 'JOVANOVIC, NIKOLA (B)',
+                                       'PCNV': 'POPOVIC, MARKO (A)', 'PATP': 'POPOVIC, MARKO (B)',
+                                       'PJMJ': 'POPOVIC, PETAR (A)', 'P007398': 'POPOVIC, PETAR (B)',
+                                       'PLCC': 'WARREN, CHRIS (A)', 'P006549': 'WARREN, CHRIS (B)',
+                                       'P005261': 'WRIGHT, CHRIS (A)', 'P005968': 'WRIGHT, CHRIS (B)'}.items():
+            cursor.execute(f"UPDATE {competition}_{table} " \
+                           f"SET player = '{update_name}' " \
+                           f"WHERE player_id = '{player_id}'")
+
     print("TimeCounterFixing:", round(time() - start_fixing, 1), "sec  --- ",
           "TimeCounterTable:", round(time() - start_table, 1), "sec")
