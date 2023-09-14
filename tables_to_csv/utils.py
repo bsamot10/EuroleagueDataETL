@@ -85,6 +85,9 @@ def table_to_csv(competition, table, order_by_col, connection):
                     df["points_a"].values[i] = ""
                     df["points_b"].values[i] = ""
         df.to_csv(f"../data/{competition}_csv/{competition}_{table}.csv", index=False)
+        if "player" in df.columns:
+            df = df[df["player"].notna()]
+        df.to_parquet(f"../data/{competition}_prq/{competition}_{table}.prq")
         print("time_counter:", round(time.time() - start, 1), "sec")
     except Exception as e:
         print(e)

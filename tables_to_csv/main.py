@@ -25,6 +25,8 @@ def main():
     # create a folder to save the csv data
     if not os.path.exists(f"../data/{competition}_csv"):
         os.makedirs(f"../data/{competition}_csv")
+    if not os.path.exists(f"../data/{competition}_prq"):		
+    	os.makedirs(f"../data/{competition}_prq")
 
     # get the table names and the columns to order by
     tables_order_by_cols = [("header", "game_id"), 
