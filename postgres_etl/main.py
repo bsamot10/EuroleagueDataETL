@@ -2,6 +2,8 @@ from utils import get_datetime_info, SimpleLogger, get_connection, ConfigParser
 from table_loading import EuroDatabaseLoader
 import sys 
 import os
+import warnings
+warnings.filterwarnings("ignore")
 
 
 def main():
