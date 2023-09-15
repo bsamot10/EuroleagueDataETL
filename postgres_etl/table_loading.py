@@ -10,8 +10,7 @@ import numpy
 import json
 import os
 import warnings
-
-warnings.filterwarnings('ignore')
+warnings.filterwarnings("ignore")
 
 
 class EuroDatabaseLoader(SchemaLoader):
