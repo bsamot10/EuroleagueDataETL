@@ -2,6 +2,8 @@ from utils import get_datetime_info, SimpleLogger, ConfigParser
 from scrapper import EuroScrapas
 import sys 
 import os
+import warnings
+warnings.filterwarnings("ignore")
 
 
 def main():
