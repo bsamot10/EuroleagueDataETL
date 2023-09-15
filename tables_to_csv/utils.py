@@ -4,7 +4,7 @@ import psycopg2
 import json
 import time
 import warnings
-warnings.filterwarnings('ignore')
+warnings.filterwarnings("ignore")
 
 
 class SimpleLogger:
@@ -34,8 +34,7 @@ class ConfigParser(ArgumentParser):
         # set the command line arguments
         self.add_argument('-cp', '--competition', type=str, nargs='?', default="euroleague",
                           choices=["euroleague", "eurocup"],
-                          help="The European basketball competition: 'euroleague' or 'eurocup'"
-                          )
+                          help="The European basketball competition: 'euroleague' or 'eurocup'")
         args = self.parse_args()
 
         return args
