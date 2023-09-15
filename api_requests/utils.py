@@ -1,6 +1,8 @@
 from argparse import ArgumentParser
 from datetime import datetime, date
 from itertools import chain
+import warnings
+warnings.filterwarnings("ignore")
 
 
 def get_datetime_info():
