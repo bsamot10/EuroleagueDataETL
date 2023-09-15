@@ -1,5 +1,7 @@
 import pandas.io.sql as io_sql
 from time import time
+import warnings
+warnings.filterwarnings("ignore")
 
 
 class Indexer:
