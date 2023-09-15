@@ -2,6 +2,8 @@ from time import time
 import requests
 import json
 import os
+import warnings
+warnings.filterwarnings("ignore")
 
 
 class EuroScrapas:
