@@ -129,7 +129,7 @@ def strip_box_score(df):
     df["Team"] = df["Team"].str.strip()
     df["Dorsal"] = df["Dorsal"].str.strip()
     df["Minutes"] = df["Minutes"].str.strip()
-    df["Player"] = df["Player"].str.strip().replace(numpy.nan, "").str.upper()
+    df["Player"] = df["Player"].str.strip().replace(numpy.nan, "").str.upper().str.replace("\s*,\s*", ', ', regex=True)
 
     return df
 
@@ -147,7 +147,7 @@ def strip_points(df):
     df["SECOND_CHANCE"] = df["SECOND_CHANCE"].str.strip()
     df["POINTS_OFF_TURNOVER"] = df["POINTS_OFF_TURNOVER"].str.strip()
     df["CONSOLE"] = df["CONSOLE"].str.strip()
-    df["PLAYER"] = df["PLAYER"].str.strip().replace(numpy.nan, "").str.upper()
+    df["PLAYER"] = df["PLAYER"].str.strip().replace(numpy.nan, "").str.upper().str.replace("\s*,\s*", ', ', regex=True)
 
     return df
 
@@ -161,7 +161,7 @@ def strip_play_by_play(df):
     df["PLAYTYPE"] = df["PLAYTYPE"].str.strip()
     df["PLAYINFO"] = df["PLAYINFO"].str.strip()
     df["MARKERTIME"] = df["MARKERTIME"].str.strip()
-    df["PLAYER"] = df["PLAYER"].str.strip().replace(numpy.nan, "").str.upper()
+    df["PLAYER"] = df["PLAYER"].str.strip().replace(numpy.nan, "").str.upper().str.replace("\s*,\s*", ', ', regex=True)
     df["TEAM"] = df["TEAM"].str.strip().replace(numpy.nan, "")
     df["DORSAL"] = df["DORSAL"].str.strip().replace(numpy.nan, "")
 
