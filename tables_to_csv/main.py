@@ -2,6 +2,8 @@ from utils import SimpleLogger, ConfigParser, get_connection, table_to_csv
 from datetime import datetime
 import os
 import sys
+import warnings
+warnings.filterwarnings("ignore")
 
 
 def main():
