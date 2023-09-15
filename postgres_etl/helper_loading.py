@@ -2,6 +2,8 @@ from time import time
 import pandas as pd
 import json
 import numpy
+import warnings
+warnings.filterwarnings("ignore")
 
 files_to_exclude = {table: [f"U2008_Last16_08_112_20090203_{table}.json",
                             f"U2008_Last16_09_119_20090210_{table}.json",
