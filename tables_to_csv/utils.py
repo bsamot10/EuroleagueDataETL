@@ -34,7 +34,8 @@ class ConfigParser(ArgumentParser):
         # set the command line arguments
         self.add_argument('-cp', '--competition', type=str, nargs='?', default="euroleague",
                           choices=["euroleague", "eurocup"],
-                          help="The European basketball competition: 'euroleague' or 'eurocup'")
+                          help="The European basketball competition: 'euroleague' or 'eurocup'"
+                          )
         args = self.parse_args()
 
         return args
@@ -85,5 +86,6 @@ def table_to_csv(competition, table, order_by_col, connection):
                     df["points_b"].values[i] = ""
         df.to_csv(f"../data/{competition}_csv/{competition}_{table}.csv", index=False)
         print("time_counter:", round(time.time() - start, 1), "sec")
+        
     except Exception as e:
         print(e)

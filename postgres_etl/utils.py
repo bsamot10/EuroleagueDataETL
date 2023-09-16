@@ -3,6 +3,8 @@ from datetime import datetime, date
 from itertools import chain
 import psycopg2
 import json
+import warnings
+warnings.filterwarnings("ignore")
 
 
 def get_datetime_info():
