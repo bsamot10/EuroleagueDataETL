@@ -54,9 +54,11 @@ class SchemaLoader:
         self.map_table_columns_to_json_box = {"score_extra_time_1_a": "Extra1",
                                               "score_extra_time_2_a": "Extra2",
                                               "score_extra_time_3_a": "Extra3",
+                                              "score_extra_time_4_a": "Extra4",
                                               "score_extra_time_1_b": "Extra1",
                                               "score_extra_time_2_b": "Extra2",
-                                              "score_extra_time_3_b": "Extra3"}
+                                              "score_extra_time_3_b": "Extra3",
+                                              "score_extra_time_4_b": "Extra4"}
         
         self.table_column_names["header"] = {"game_id": "varchar", 
                                              "game": "varchar", 
@@ -96,9 +98,11 @@ class SchemaLoader:
                                              "score_extra_time_1_a": "varchar",
                                              "score_extra_time_2_a": "varchar",
                                              "score_extra_time_3_a": "varchar",
+                                             "score_extra_time_4_a": "varchar",
                                              "score_extra_time_1_b": "varchar",
                                              "score_extra_time_2_b": "varchar",
-                                             "score_extra_time_3_b": "varchar"}
+                                             "score_extra_time_3_b": "varchar",
+                                             "score_extra_time_4_b": "varchar"}
         
     def set_box_score_columns(self):
     
