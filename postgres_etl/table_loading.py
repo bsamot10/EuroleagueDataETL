@@ -150,8 +150,8 @@ class EuroDatabaseLoader(SchemaLoader):
             json_file = open(json_path)
             json_data = json.load(json_file)
             json_file.close()
-            extra_time_columns = [("score_extra_time_1_a", "score_extra_time_2_a", "score_extra_time_3_a"),
-                                  ("score_extra_time_1_b", "score_extra_time_2_b", "score_extra_time_3_b")]
+            extra_time_columns = [("score_extra_time_1_a", "score_extra_time_2_a", "score_extra_time_3_a", "score_extra_time_4_a"),
+                                  ("score_extra_time_1_b", "score_extra_time_2_b", "score_extra_time_3_b", "score_extra_time_4_b")]
             df = h.get_extra_time_df(extra_time_columns, json_data, self.map_table_columns_to_json_box)
             df.insert(0, "game_id", [game_id])
             dfs_box_score.append(df)
