@@ -220,8 +220,6 @@ class EuroDatabaseLoader(SchemaLoader):
             box_score = stats_a + stats_b
 
             df_box_score = pd.DataFrame(box_score)
-            if "Plusminus" in df_box_score.columns:
-                df_box_score = df_box_score.drop(columns=["Plusminus"])
             number_of_rows = df_box_score.shape[0]
 
             player_ids = df_box_score["Player_ID"].str.strip()
@@ -278,7 +276,7 @@ class EuroDatabaseLoader(SchemaLoader):
         df_box["is_playing"].mask(df_box["minutes"] > 0, 1.0, inplace=True)
         df_box = df_box[df_box["dorsal"] != "TOTAL"]
 
-        columns_to_sum = ["is_playing", "is_starter"] + list(self.table_column_names["players"].keys())[7:26]
+        columns_to_sum = ["is_playing", "is_starter"] + list(self.table_column_names["players"].keys())[7:27]
 
         for col in columns_to_sum:
             df_box[col] = df_box[col].astype('float')
