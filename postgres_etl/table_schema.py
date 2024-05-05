@@ -136,7 +136,8 @@ class SchemaLoader:
                                                 "blocks_against": "int",
                                                 "fouls_committed": "int",
                                                 "fouls_received": "int",
-                                                "valuation": "int"}
+                                                "valuation": "int",
+                                                "plus_minus": "int"}
         
     def set_players_columns(self):
     
@@ -166,6 +167,7 @@ class SchemaLoader:
                                               "fouls_committed": "int",
                                               "fouls_received": "int",
                                               "valuation": "int",
+                                              "plus_minus": "int",
                                               "minutes_per_game": "float",
                                               "points_per_game": "float",
                                               "two_points_made_per_game": "float",
@@ -187,7 +189,8 @@ class SchemaLoader:
                                               "blocks_against_per_game": "float",
                                               "fouls_committed_per_game": "float",
                                               "fouls_received_per_game": "float",
-                                              "valuation_per_game": "float"}
+                                              "valuation_per_game": "float",
+                                              "plus_minus_per_game": "float"}
         
     def set_teams_columns(self):
     
