@@ -1,7 +1,7 @@
 {
-"database": "<the name of the database>",
-"user": "<your username>",
-"password": "<your password>",
-"host": "<localhost or some other IP>",
-"port": "<5432 or 5433 or some other port>"
+"database": "<database name>",
+"user": "<your database username>",
+"password": "<your database password>",
+"host": "<server's hostname or ip>",
+"port": "<database port>"
 }
