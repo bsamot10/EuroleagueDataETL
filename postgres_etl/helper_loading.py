@@ -250,10 +250,9 @@ def fix_box_score_minutes(connection, cursor, competition, start_table):
     '''
     A helper function fixing the cases where box_score minutes are wrong.
     '''
-    start_fixing = time()
-    print(f"\nFixing Minutes BOX_SCORE")
-
     if competition == "euroleague":
+        start_fixing = time()
+        print(f"\nFixing Minutes BOX_SCORE")
         queries = ["UPDATE euroleague_box_score SET minutes = '26:04' WHERE game_player_id = 'E2009_074_PBDK'", 
                    "UPDATE euroleague_box_score SET minutes = '200:00' WHERE game_player_id = 'E2009_074_ZAL'", 
                    "UPDATE euroleague_box_score SET minutes = '13:55' WHERE game_player_id = 'E2009_074_PLXL'", 
@@ -266,6 +265,6 @@ def fix_box_score_minutes(connection, cursor, competition, start_table):
         for query in queries:
             cursor.execute(query)
             connection.commit()
+        print("TimeCounterFixing:", round(time() - start_fixing, 1), "sec  --- ",
+              "TimeCounterTable:", round(time() - start_table, 1), "sec")
 
-    print("TimeCounterFixing:", round(time() - start_fixing, 1), "sec  --- ",
-          "TimeCounterTable:", round(time() - start_table, 1), "sec")
