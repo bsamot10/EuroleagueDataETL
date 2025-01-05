@@ -245,6 +245,7 @@ def fix_duplicate_players(connection, cursor, competition, table, start_table):
     print("TimeCounterFixing:", round(time() - start_fixing, 1), "sec  --- ",
           "TimeCounterTable:", round(time() - start_table, 1), "sec")
 
+
 def fix_box_score_minutes(connection, cursor, competition, start_table):
     '''
     A helper function fixing the cases where box_score minutes are wrong.
