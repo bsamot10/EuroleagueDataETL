@@ -63,6 +63,9 @@ class EuroDatabaseLoader(SchemaLoader):
 
             # when the requested table is box_score, build two additional tables
             if table == "box_score":
+
+                # fix box_score minutes before building the tables
+                h.fix_box_score_minutes(self.connection, self.cursor, self.competition, start_table)
                 
                 # load players and set indices after loading
                 sql_insert_players = self.get_sql_insert_query(f"{self.competition}_players")
