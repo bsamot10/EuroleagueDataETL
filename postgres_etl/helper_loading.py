@@ -259,7 +259,10 @@ def fix_box_score_minutes(connection, cursor, competition, start_table):
                    "UPDATE euroleague_box_score SET minutes = '13:55' WHERE game_player_id = 'E2009_074_PLXL'", 
                    "UPDATE euroleague_box_score SET minutes = '00:19' WHERE game_player_id = 'E2007_141_PLKE'", 
                    "UPDATE euroleague_box_score SET minutes = '34:48' WHERE game_player_id = 'E2010_127_PJUO'",
-                   "UPDATE euroleague_box_score SET minutes = '01:00' WHERE game_player_id = 'E2007_163_PAWI'"]
+                   "UPDATE euroleague_box_score SET is_playing = 0 WHERE game_player_id = 'E2024_065_P012099'",
+                   "UPDATE euroleague_box_score SET is_playing = 0 WHERE game_player_id = 'E2016_150_P002506'",
+                   "UPDATE euroleague_box_score SET is_playing = 0 WHERE game_player_id = 'E2016_132_P007032'",
+                   "UPDATE euroleague_box_score SET minutes = '01:00', is_playing = 1 WHERE game_player_id = 'E2007_163_PAWI'"]
         for query in queries:
             cursor.execute(query)
             connection.commit()
